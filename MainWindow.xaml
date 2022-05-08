@@ -1,0 +1,501 @@
+﻿<mah:MetroWindow x:Class="Identinator.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 xmlns:mdXaml="clr-namespace:MdXaml;assembly=MdXaml"
+                 xmlns:util="clr-namespace:Identinator.Util"
+                 xmlns:viewModels="clr-namespace:Identinator.ViewModels"
+                 xmlns:converters="clr-namespace:Identinator.Converters"
+                 xmlns:controlzex="urn:controlzex"
+                 TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+                 Background="{DynamicResource MaterialDesignPaper}"
+                 TextElement.FontWeight="Medium"
+                 TextElement.FontSize="14"
+                 FontFamily="{materialDesign:MaterialDesignFont}"
+                 GlowBrush="{DynamicResource AccentColorBrush}"
+                 mc:Ignorable="d"
+                 Loaded="MainWindow_OnLoaded"
+                 Closed="MainWindow_OnClosed"
+                 Title="Nefarius' Identinator"
+                 MinWidth="800"
+                 MinHeight="600"
+                 Height="{util:SettingBinding Height}"
+                 Width="{util:SettingBinding Width}"
+                 Left="{util:SettingBinding Left}"
+                 ToolTip="{util:SettingBinding Top}"
+                 Icon="pack://application:,,,/assets/NSS-128x128.png">
+
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <Button x:Name="VersionButton" Click="VersionButton_OnClick" Content="Version">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconModern Width="22"
+                                                      Height="22"
+                                                      VerticalAlignment="Center"
+                                                      Kind="SocialGithubOctocat" />
+                            <TextBlock Margin="4 0 0 0"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+
+    <TabControl x:Name="MainTabControl">
+        <!-- Devices -->
+        <TabItem Header="USB Devices">
+            <Grid x:Name="MainGrid">
+                <Grid.DataContext>
+                    <viewModels:UsbDevicesTreeViewModel />
+                </Grid.DataContext>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="550" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Left panel -->
+                <GroupBox Header="USB Devices" Margin="10">
+                    <TreeView
+                        ItemsSource="{Binding Path=UsbHostControllers}"
+                        SelectedItemChanged="TreeView_OnSelectedItemChanged">
+                        <TreeView.Resources>
+                            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+                            <!-- USB Host Controllers -->
+                            <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHostController}"
+                                                      ItemsSource="{Binding UsbHubs}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Usb" Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding }" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+
+                            <!-- USB Hubs -->
+                            <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHubCollection}"
+                                                      ItemsSource="{Binding ChildNodes}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Usb" Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding }" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+
+                            <!-- Nested USB Hubs-->
+                            <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHub}"
+                                                      ItemsSource="{Binding ChildNodes}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Usb" Margin="0,0,5,0" />
+                                    <TextBlock Text="{Binding }" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+
+                            <!-- USB Devices -->
+                            <DataTemplate DataType="{x:Type viewModels:UsbDevice}">
+                                <DockPanel LastChildFill="False" ToolTipService.IsEnabled="True">
+                                    <materialDesign:PackIcon 
+                                        Margin="0,0,5,0"
+                                        Kind="UsbPort" 
+                                        Foreground="MediumPurple"/>
+                                    <TextBlock Text="{Binding Name}" />
+                                    <TextBlock Text=" [Port " />
+                                    <TextBlock Text="{Binding PortNumber}" />
+                                    <TextBlock Text="]" />
+
+                                    <!-- Add icon if rewriting is enabled in configuration -->
+                                    <iconPacks:PackIconMaterial
+                                        Margin="10,0,5,0"
+                                        Visibility="{Binding Converter={StaticResource BooleanToVisibilityConverter}, Path=RewriteSettings.Replace}"
+                                        Kind="Cog"
+                                        Foreground="DarkOrange"
+                                        VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+                                    <!-- Add icon if rewriting is enabled in configuration -->
+                                    <iconPacks:PackIconMaterial
+                                        Margin="5,0,5,0"
+                                        Visibility="{Binding Converter={StaticResource BooleanToVisibilityConverter}, Path=IsRewritten}"
+                                        Kind="CheckCircle"
+                                        Foreground="Red"
+                                        VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+                                    <!-- List child devices in tooltip -->
+                                    <DockPanel.ToolTip>
+                                        <ToolTip controlzex:ToolTipAssist.AutoMove="True">
+                                            <ToolTip.Template>
+                                                <ControlTemplate>
+                                                    <Grid>
+                                                        <Border Background="Gray"
+                                                                BorderBrush="Black"
+                                                                BorderThickness="1"
+                                                                Opacity="0.9"
+                                                                SnapsToDevicePixels="True" />
+                                                        <StackPanel>
+                                                            <TreeView
+                                                                ItemsSource="{Binding Path=ChildDevices}">
+                                                                <TreeView.Resources>
+                                                                    <DataTemplate
+                                                                        DataType="{x:Type viewModels:UsbDevice}">
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <materialDesign:PackIcon Kind="UsbPort"
+                                                                                Margin="0,0,5,0" />
+                                                                            <TextBlock
+                                                                                Foreground="WhiteSmoke"
+                                                                                FontSize="16"
+                                                                                FontWeight="Bold"
+                                                                                Text="{Binding}"
+                                                                                TextOptions.TextFormattingMode="Display"
+                                                                                TextOptions.TextRenderingMode="ClearType" />
+                                                                        </StackPanel>
+                                                                    </DataTemplate>
+                                                                </TreeView.Resources>
+                                                            </TreeView>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </ToolTip.Template>
+                                        </ToolTip>
+                                    </DockPanel.ToolTip>
+                                </DockPanel>
+                            </DataTemplate>
+                        </TreeView.Resources>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                <Setter Property="IsExpanded" Value="True" />
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                    </TreeView>
+                </GroupBox>
+
+                <!-- Right panel -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Global settings -->
+                    <GroupBox Grid.Row="0" Header="Global settings" Margin="10">
+                        <StackPanel Margin="5">
+                            <DockPanel LastChildFill="False">
+                                <mah:ToggleSwitch IsOn="{Binding FilterDriver.IsEnabled, Mode=TwoWay}">
+                                    Enable rewriting
+                                </mah:ToggleSwitch>
+                            </DockPanel>
+                            <TextBlock Margin="0,5,0,0">
+                                The rewriting feature gets automatically disabled on each reboot.
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Placeholder -->
+                    <Grid Grid.Row="1" x:Name="PlaceholderGrid">
+                        <TextBlock Margin="10"
+                                   Style="{StaticResource MaterialDesignHeadline4TextBlock}">
+                            Please select a USB device
+                        </TextBlock>
+                    </Grid>
+
+                    <!-- Selected device properties -->
+                    <Grid Grid.Row="1" Margin="10" x:Name="SelectedDeviceDetailsGrid"
+                          Visibility="Collapsed"
+                          DataContext="{Binding Path=SelectedDevice}">
+
+                        <Grid.Resources>
+                            <converters:HexStringConverter x:Key="HexStringConverter" />
+                        </Grid.Resources>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Margin="0,10,0,5"
+                                   Style="{StaticResource MaterialDesignHeadline5TextBlock}">
+                            Selected device properties
+                        </TextBlock>
+
+                        <TabControl Grid.Row="1">
+                            <!-- Device details -->
+                            <TabItem Header="Device details">
+                                <ScrollViewer>
+                                    <StackPanel Margin="0,0,10,0">
+                                        <TextBlock Margin="0,10,0,10"
+                                                   Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                                   Text="{Binding Name}" />
+                                        <TextBox
+                                            Margin="0, 5, 0,15"
+                                            materialDesign:HintAssist.HelperText="Instance ID"
+                                            IsReadOnly="True"
+                                            Text="{Binding Device.InstanceId, Mode=OneWay}" />
+
+                                        <!-- Child devices -->
+                                        <TextBlock Margin="0,10,0,0"
+                                                   Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                            Child Devices
+                                        </TextBlock>
+                                        <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2">
+                                            <TreeView
+                                                Height="100"
+                                                ItemsSource="{Binding Path=ChildDevices}">
+                                                <TreeView.Resources>
+                                                    <DataTemplate DataType="{x:Type viewModels:UsbDevice}">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <materialDesign:PackIcon Kind="UsbPort" Margin="0,0,5,0" />
+                                                            <TextBlock Text="{Binding }" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </TreeView.Resources>
+                                                <TreeView.ItemContainerStyle>
+                                                    <Style TargetType="{x:Type TreeViewItem}"
+                                                           BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                                        <Setter Property="IsExpanded" Value="True" />
+                                                    </Style>
+                                                </TreeView.ItemContainerStyle>
+                                            </TreeView>
+                                        </Border>
+
+                                        <!-- Hardware IDs -->
+                                        <TextBlock Margin="0,10,0,0"
+                                                   Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                            Hardware IDs
+                                        </TextBlock>
+                                        <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2">
+                                            <ListView ItemsSource="{Binding HardwareIds}" Height="100" />
+                                        </Border>
+
+                                        <!-- Compatible IDs -->
+                                        <TextBlock Margin="0,10,0,0"
+                                                   Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                            Compatible IDs
+                                        </TextBlock>
+                                        <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2">
+                                            <ListView ItemsSource="{Binding CompatibleIds}" Height="100" />
+                                        </Border>
+
+                                        <TextBox
+                                            Margin="0, 10, 0,15"
+                                            materialDesign:HintAssist.HelperText="Device Class"
+                                            IsReadOnly="True"
+                                            Text="{Binding Class, Mode=OneWay}" />
+                                        <TextBox
+                                            Margin="0, 5, 0,15"
+                                            materialDesign:HintAssist.HelperText="Enumerator Name"
+                                            IsReadOnly="True"
+                                            Text="{Binding Enumerator, Mode=OneWay}" />
+                                        <TextBox
+                                            Margin="0, 5, 0,15"
+                                            materialDesign:HintAssist.HelperText="Port Number"
+                                            IsReadOnly="True"
+                                            Text="{Binding PortNumber, Mode=OneWay}" />
+
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </TabItem>
+
+                            <!-- Rewrite settings -->
+                            <TabItem Header="Rewrite settings">
+                                <StackPanel>
+                                    <!-- Is Replacing enabled -->
+                                    <mah:ToggleSwitch Margin="10"
+                                                      IsOn="{Binding RewriteSettings.Replace, Mode=TwoWay}">
+                                        Enable override for this device
+                                    </mah:ToggleSwitch>
+
+                                    <Grid IsEnabled="{Binding RewriteSettings.Replace, Mode=OneWay}">
+                                        <StackPanel>
+                                            <TextBox
+                                                Margin="10"
+                                                util:TextBoxBehaviour.KeepCursorPosition="true"
+                                                materialDesign:HintAssist.HelperText="New Vendor ID (in hex format, autogenerated)"
+                                                Text="{Binding RewriteSettings.VendorId, Converter={StaticResource HexStringConverter}}" />
+                                            <TextBox
+                                                Margin="10"
+                                                util:TextBoxBehaviour.KeepCursorPosition="true"
+                                                materialDesign:HintAssist.HelperText="New Product ID (in hex format, autogenerated)"
+                                                Text="{Binding RewriteSettings.ProductId, Converter={StaticResource HexStringConverter}}" />
+
+                                            <mah:ToggleSwitch Margin="10"
+                                                      IsOn="{Binding RewriteSettings.OverrideCompatibleIds, Mode=TwoWay}">
+                                                Override Compatible IDs to WinUSB-compatible Vendor Device
+                                            </mah:ToggleSwitch>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Actions -->
+                                    <DockPanel LastChildFill="False">
+                                        <Button Margin="10" Click="ApplyChanges_OnClick">Apply changes</Button>
+                                        <TextBlock VerticalAlignment="Center">
+                                            Applying changes restarts (power-cycles) the device
+                                        </TextBlock>
+                                    </DockPanel>
+                                </StackPanel>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </TabItem>
+
+        <!-- Driver -->
+        <TabItem Header="Filter Driver">
+            <Grid x:Name="FilterDriverGrid">
+                <Grid.DataContext>
+                    <viewModels:FilterDriverViewModel />
+                </Grid.DataContext>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Filter Driver Installer -->
+                <GroupBox Grid.Row="0" Grid.Column="0" 
+                          Header="Filter Driver Installer" 
+                          Margin="20">
+                    <StackPanel>
+                        <TextBox
+                            x:Name="DriverVersionTextBox"
+                            Margin="10"
+                            materialDesign:HintAssist.HelperText="Detected Driver Version"
+                            IsReadOnly="True"
+                            Text="{Binding CurrentDriverVersion, Mode=OneWay}" />
+
+                        <DockPanel LastChildFill="False">
+                            <Button 
+                                Margin="10"
+                                Click="InstallDriver_OnClick">
+                                (Re-)Install latest Driver
+                            </Button>
+
+                            <Button 
+                                IsEnabled="{Binding IsDriverInstalled}"
+                                Margin="10"
+                                Click="UninstallDriver_OnClick">
+                                Uninstall Driver
+                            </Button>
+                        </DockPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Filter Driver Settings -->
+                <GroupBox Grid.Row="0" Grid.Column="1"
+                          Header="Filter Driver Settings"
+                          Margin="20">
+                    <StackPanel>
+                        <mah:ToggleSwitch IsOn="{Binding IsVerboseOn, Mode=TwoWay}"
+                                          Margin="20">
+                            Enable verbose trace messages
+                        </mah:ToggleSwitch>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+
+        <!-- About -->
+        <TabItem Header="About">
+            <Grid MaxWidth="650">
+                <mdXaml:MarkdownScrollViewer xml:space="preserve"
+                                             Margin="20"
+                                             HorizontalAlignment="Left">
+<mdXaml:MarkdownScrollViewer.MarkdownStyle>
+    <Style TargetType="FlowDocument" BasedOn="{x:Static mdXaml:MarkdownStyle.Standard}">
+        <Style.Resources>
+            <Style TargetType="Paragraph">
+                <Setter Property="Margin" Value="4, 2, 20, 6"/>
+                <Setter Property="TextAlignment" Value="Justify"></Setter>
+                <Style.Triggers>
+                    <Trigger Property="Tag" Value="Heading2">
+                        <Setter Property="Foreground" Value="LightGray" />
+                        <Setter Property="FontSize" Value="32" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
+    </Style>
+</mdXaml:MarkdownScrollViewer.MarkdownStyle>
+## Identinator
+
+BSD 3-Clause License
+
+Copyright (c) 2022, Nefarius Software Solutions e.U.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+## nssidswap.sys
+
+nssidswap - USB Bus Class Filter Driver for patching Hardware IDs
+
+Copyright (c) 2022, Nefarius Software Solutions e.U.
+ All rights reserved.
+
+ Redistribution and use in bytecode or binary forms, without modification, 
+ are permitted provided that the following conditions are met:
+
+   * Redistributions in bytecode or binary form must reproduce the above 
+     copyright notice, this list of conditions and the following disclaimer 
+     in the documentation and/or other materials provided with the 
+     distribution. This includes repository READMEs for open-source projects
+     interfacing with this product, websites or in-application credits.
+
+   * Neither the name of the nssidswap.sys nor the names of its contributors may 
+     be used to endorse or promote products derived from or distributed 
+     with this software without specific prior written permission.
+
+   * Bundling binaries signed by Nefarius Software Solutions e.U. is
+     prohibited without prior written consent from the authors. It is
+     advised to point potential users to the official download location
+     outlined in the website and/or repository of this solution.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
+ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ POSSIBILITY OF SUCH DAMAGE.
+                </mdXaml:MarkdownScrollViewer>
+            </Grid>
+        </TabItem>
+    </TabControl>
+
+</mah:MetroWindow>

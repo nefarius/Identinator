@@ -51,7 +51,7 @@ public partial class MainWindow : MetroWindow
 
         var assembly = Assembly.GetExecutingAssembly();
         var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-        VersionButton.Content = $"Version: {fileVersionInfo.ProductVersion}";
+        VersionButton.Content = $"UI Version: {fileVersionInfo.FileVersion}";
     }
 
     private void EnumerateAllDevices()

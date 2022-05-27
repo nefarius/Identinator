@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using Identinator.Annotations;
 using Identinator.Util;
 using Microsoft.Win32;
 using Nefarius.Utilities.DeviceManagement.Drivers;
@@ -163,8 +166,7 @@ internal static class FilterDriver
     }
 }
 
-[AddINotifyPropertyChangedInterface]
-internal class FilterDriverViewModel
+internal class FilterDriverViewModel : INotifyPropertyChanged
 {
     /// <summary>
     ///     Regex to strip out version value from INF file.
@@ -223,5 +225,18 @@ internal class FilterDriverViewModel
         var match = DriverVersionRegex.Match(infContent);
 
         return Version.Parse(match.Groups[1].Value);
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    [NotifyPropertyChangedInvocator]
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    public void Refresh()
+    {
+        OnPropertyChanged(null);
     }
 }

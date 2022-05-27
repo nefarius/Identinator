@@ -29,7 +29,27 @@
                  ToolTip="{util:SettingBinding Top}"
                  Icon="pack://application:,,,/favicon.png">
 
-    <TabControl>
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <Button x:Name="VersionButton" Click="VersionButton_OnClick" Content="Version">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconModern Width="22"
+                                                      Height="22"
+                                                      VerticalAlignment="Center"
+                                                      Kind="SocialGithubOctocat" />
+                            <TextBlock Margin="4 0 0 0"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+
+    <TabControl x:Name="MainTabControl">
         <!-- Devices -->
         <TabItem Header="USB Devices">
             <Grid x:Name="MainGrid">
@@ -356,6 +376,7 @@
                             </Button>
 
                             <Button 
+                                IsEnabled="{Binding IsDriverInstalled}"
                                 Margin="10"
                                 Click="UninstallDriver_OnClick">
                                 Uninstall Driver

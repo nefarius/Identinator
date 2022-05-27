@@ -52,7 +52,8 @@
         <mdXaml:MarkdownScrollViewer Grid.Row="1"
                                      xml:space="preserve"
                                      Margin="20"
-                                     HorizontalAlignment="Left">
+                                     HorizontalAlignment="Left"
+                                     ClickAction="OpenBrowser">
 <mdXaml:MarkdownScrollViewer.MarkdownStyle>
     <Style TargetType="FlowDocument" BasedOn="{x:Static mdXaml:MarkdownStyle.Standard}">
         <Style.Resources>
@@ -92,13 +93,29 @@ DO NOT USE THIS SOFTWARE IF:
 - A YouTube video with bad music and 5 mid-roll-ads recommended to use it
 - You have no clue what any of this means and just want to play your games
 - You're browsing the Internet without an ad blocker
-- Sarcasm is foreign to you
+- Problem-solving is an underdeveloped trait of yours
 
 ## This is free, open-source software
 
 Check [vigem.org](https://vigem.org/) for source code and documentation. As a private individual you receive this 
 work from Nefarius Software Solutions e.U. free of charge. If somebody made you pay for it, you got scammed and I 
-advise you reclaim your purchase quickly.
+advise you reclaim your purchase quickly. Commercial use of the binaries signed by Nefarius Software Solutions e.U. 
+is prohibited without prior written consent by the authors. You can find contact information at 
+[github.com/nefarius](https://github.com/nefarius).
+
+## Support and warranty
+
+Publicly available community support resources are available at [vigem.org/Community-Support/](https://vigem.org/Community-Support/).
+
+**DO NOT OPEN ISSUES ("BUG REPORTS") OR NAG THE AUTHORS FOR HELP IF YOU SCREWED UP YOUR SYSTEM, YOU HAVE BEEN WARNED ENOUGH TIMES, 
+IF YOU DON'T KNOW WHAT YOU'RE DOING CLOSE THE APP NOW!**
+
+No warranty is provided whatsoever, see the "About" tab for more information about the license agreements.
+
+## Additional documentation
+
+You can find additional resources at [vigem.org/projects/Identinator/](https://vigem.org/projects/Identinator/) 
+and are highly encouraged to check them out before starting to fiddle with this application.
 <!-- END MARKDOWN -->
         </mdXaml:MarkdownScrollViewer>
 

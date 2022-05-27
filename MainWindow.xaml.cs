@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,6 +48,10 @@ public partial class MainWindow : MetroWindow
             typeof(FrameworkElement), new FrameworkPropertyMetadata(int.MaxValue));
 
         InitializeComponent();
+
+        var assembly = Assembly.GetExecutingAssembly();
+        var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+        VersionButton.Content = $"Version: {fileVersionInfo.ProductVersion}";
     }
 
     private void EnumerateAllDevices()
@@ -181,6 +187,16 @@ public partial class MainWindow : MetroWindow
             Settings.Default.IsFirstRun = false;
         }
 
+        if (!_viewModel.FilterDriver.IsDriverInstalled)
+        {
+            MainTabControl.SelectedIndex = 1;
+            await this.ShowMessageAsync("Filter driver not found",
+                @"It looks like the mandatory filter driver isn't installed. " +
+                @"Please install it using the upcoming dialog. " +
+                @"You may need to reboot your machine afterwards. "
+            );
+        }
+
         _deviceListener.DeviceArrived += DeviceListenerOnDeviceArrived;
 
         _deviceListener.StartListen(FilterDriver.FilteredDeviceInterfaceId);
@@ -292,7 +308,7 @@ public partial class MainWindow : MetroWindow
 
         button.IsEnabled = true;
 
-        DriverVersionTextBox.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
+        _viewModel.FilterDriver.Refresh();
     }
 
     private async void UninstallDriver_OnClick(object sender, RoutedEventArgs e)
@@ -319,6 +335,13 @@ public partial class MainWindow : MetroWindow
             @"but a reboot is required for completion. Don't forget to do that ❤️");
 
         button.IsEnabled = true;
+
+        _viewModel.FilterDriver.Refresh();
+    }
+
+    private void VersionButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        Process.Start("https://github.com/nefarius/Identinator/releases/latest");
     }
 
     #endregion

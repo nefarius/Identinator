@@ -181,15 +181,16 @@
                     </Grid.RowDefinitions>
 
                     <!-- Global settings -->
-                    <GroupBox Grid.Row="0" Header="Global settings" Margin="10">
-                        <StackPanel>
+                    <GroupBox Grid.Row="0" Header="Global settings" Margin="5">
+                        <StackPanel Margin="5,5,0,10">
                             <DockPanel LastChildFill="False">
-                                <CheckBox IsChecked="{Binding FilterDriver.IsEnabled, Mode=TwoWay}">Enable rewriting</CheckBox>
-                                <CheckBox IsChecked="{Binding FilterDriver.IsVerboseOn, Mode=TwoWay}"
-                                          Margin="20,0,0,0">
-                                    Enable verbose trace messages
-                                </CheckBox>
+                                <mah:ToggleSwitch IsOn="{Binding FilterDriver.IsEnabled, Mode=TwoWay}">
+                                    Enable rewriting
+                                </mah:ToggleSwitch>
                             </DockPanel>
+                            <TextBlock Margin="0,5,0,0">
+                                The rewriting feature gets automatically disabled on each reboot.
+                            </TextBlock>
                         </StackPanel>
                     </GroupBox>
 
@@ -340,7 +341,7 @@
         </TabItem>
 
         <!-- Driver -->
-        <TabItem Header="Filter driver">
+        <TabItem Header="Filter Driver">
             <Grid x:Name="FilterDriverGrid">
                 <Grid.DataContext>
                     <viewModels:FilterDriverViewModel />
@@ -382,6 +383,18 @@
                                 Uninstall Driver
                             </Button>
                         </DockPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Filter Driver Settings -->
+                <GroupBox Grid.Row="0" Grid.Column="1"
+                          Header="Filter Driver Settings"
+                          Margin="20">
+                    <StackPanel>
+                        <mah:ToggleSwitch IsOn="{Binding IsVerboseOn, Mode=TwoWay}"
+                                          Margin="20">
+                            Enable verbose trace messages
+                        </mah:ToggleSwitch>
                     </StackPanel>
                 </GroupBox>
             </Grid>

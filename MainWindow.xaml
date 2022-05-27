@@ -181,8 +181,8 @@
                     </Grid.RowDefinitions>
 
                     <!-- Global settings -->
-                    <GroupBox Grid.Row="0" Header="Global settings" Margin="5">
-                        <StackPanel Margin="5,5,0,10">
+                    <GroupBox Grid.Row="0" Header="Global settings" Margin="10">
+                        <StackPanel Margin="5">
                             <DockPanel LastChildFill="False">
                                 <mah:ToggleSwitch IsOn="{Binding FilterDriver.IsEnabled, Mode=TwoWay}">
                                     Enable rewriting

@@ -48,10 +48,6 @@ public partial class MainWindow : MetroWindow
             typeof(FrameworkElement), new FrameworkPropertyMetadata(int.MaxValue));
 
         InitializeComponent();
-
-        var assembly = Assembly.GetExecutingAssembly();
-        var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-        VersionButton.Content = $"UI Version: {fileVersionInfo.FileVersion}";
     }
 
     private void EnumerateAllDevices()
@@ -156,6 +152,8 @@ public partial class MainWindow : MetroWindow
 
     private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
     {
+        VersionButton.Content = $"UI Version: {Assembly.GetEntryAssembly().GetName().Version}";
+
         // Windows 10 check
         if (Environment.OSVersion.Version.Major < 10)
         {

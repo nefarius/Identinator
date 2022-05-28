@@ -46,6 +46,8 @@ public partial class MainWindow : MetroWindow
             typeof(FrameworkElement), new FrameworkPropertyMetadata(100));
         ToolTipService.ShowDurationProperty.OverrideMetadata(
             typeof(FrameworkElement), new FrameworkPropertyMetadata(int.MaxValue));
+        ToolTipService.IsEnabledProperty.OverrideMetadata(
+            typeof(FrameworkElement), new FrameworkPropertyMetadata(false));
 
         InitializeComponent();
     }

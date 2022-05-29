@@ -17,7 +17,7 @@ namespace Identinator.ViewModels;
 [AddINotifyPropertyChangedInterface]
 internal static class FilterDriver
 {
-    private static readonly RegistryKey ServiceParameters;
+    private static readonly RegistryKey? ServiceParameters;
 
     public static readonly Regex UsbHardwareIdRegex = new(@"(USB)\\(VID_([a-fA-F0-9]+)&PID_([a-fA-F0-9]+))");
 
@@ -26,9 +26,6 @@ internal static class FilterDriver
         ServiceParameters =
             Registry.LocalMachine.OpenSubKey(
                 "SYSTEM\\CurrentControlSet\\Services\\nssidswap\\Parameters", true)!;
-
-        if (ServiceParameters is null)
-            throw new Exception("nssidswap registry path not found. Is the driver installed?");
     }
 
     public static Guid FilteredDeviceInterfaceId => Guid.Parse("{86431f5b-9f5a-48ce-8fbf-a537413ef358}");
@@ -56,14 +53,14 @@ internal static class FilterDriver
 
     public static bool IsEnabled
     {
-        get => ServiceParameters.GetBool("Enabled", false);
-        set => ServiceParameters.SetBool("Enabled", value);
+        get => ServiceParameters?.GetBool("Enabled", false) ?? false;
+        set => ServiceParameters?.SetBool("Enabled", value);
     }
 
     public static bool IsVerboseOn
     {
-        get => ServiceParameters.GetBool("VerboseOn", false);
-        set => ServiceParameters.SetBool("VerboseOn", value);
+        get => ServiceParameters?.GetBool("VerboseOn", false) ?? false;
+        set => ServiceParameters?.SetBool("VerboseOn", value);
     }
 
     public static RegistryKey AddOrUpdateRewriteEntry(string hardwareId, int portNumber = 0)
@@ -76,7 +73,7 @@ internal static class FilterDriver
         var enumerator = match.Groups[1].Value;
         var vidPid = match.Groups[2].Value;
 
-        var enumeratorKey = ServiceParameters.CreateSubKey(enumerator);
+        var enumeratorKey = ServiceParameters?.CreateSubKey(enumerator);
 
         if (enumeratorKey is null)
             throw new InvalidOperationException("Failed to create sub-key for enumerator.");
@@ -107,7 +104,7 @@ internal static class FilterDriver
         var enumerator = match.Groups[1].Value;
         var vidPid = match.Groups[2].Value;
 
-        var enumeratorKey = ServiceParameters.OpenSubKey(enumerator);
+        var enumeratorKey = ServiceParameters?.OpenSubKey(enumerator);
 
         var vidPidKey = enumeratorKey?.OpenSubKey(vidPid, true);
 
@@ -173,7 +170,7 @@ internal class FilterDriverViewModel : INotifyPropertyChanged
     /// </summary>
     private static readonly Regex DriverVersionRegex =
         new(@"^DriverVer *=.*,(\d*\.\d*\.\d*\.\d*)", RegexOptions.Multiline);
-
+    
     /// <summary>
     ///     Gets or sets whether the global rewriting feature is enabled or disabled.
     /// </summary>

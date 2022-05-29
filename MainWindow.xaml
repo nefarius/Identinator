@@ -303,10 +303,10 @@
                             <TabItem Header="Rewrite settings">
                                 <StackPanel>
                                     <!-- Is Replacing enabled -->
-                                    <CheckBox Margin="10"
-                                              IsChecked="{Binding RewriteSettings.Replace, Mode=TwoWay}">
+                                    <mah:ToggleSwitch Margin="10"
+                                                      IsOn="{Binding RewriteSettings.Replace, Mode=TwoWay}">
                                         Enabled
-                                    </CheckBox>
+                                    </mah:ToggleSwitch>
 
                                     <Grid IsEnabled="{Binding RewriteSettings.Replace, Mode=OneWay}">
                                         <StackPanel>
@@ -321,10 +321,10 @@
                                                 materialDesign:HintAssist.HelperText="New Product ID"
                                                 Text="{Binding RewriteSettings.ProductId, Converter={StaticResource HexStringConverter}}" />
 
-                                            <CheckBox Margin="10"
-                                                      IsChecked="{Binding RewriteSettings.OverrideCompatibleIds, Mode=TwoWay}">
+                                            <mah:ToggleSwitch Margin="10"
+                                                      IsOn="{Binding RewriteSettings.OverrideCompatibleIds, Mode=TwoWay}">
                                                 Override Compatible IDs
-                                            </CheckBox>
+                                            </mah:ToggleSwitch>
                                         </StackPanel>
                                     </Grid>
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,12 +42,9 @@ public partial class MainWindow : MetroWindow
 
     public MainWindow()
     {
-        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-        {
-            MiniDumper.Write("Identinator.dmp");
-        };
+        AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
 
-        // Speed up appearance of tool tips
+            // Speed up appearance of tool tips
         ToolTipService.InitialShowDelayProperty.OverrideMetadata(
             typeof(FrameworkElement), new FrameworkPropertyMetadata(100));
         ToolTipService.ShowDurationProperty.OverrideMetadata(
@@ -55,6 +53,11 @@ public partial class MainWindow : MetroWindow
             typeof(FrameworkElement), new FrameworkPropertyMetadata(false));
 
         InitializeComponent();
+    }
+
+    private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        MiniDumper.Write("Identinator.dmp");
     }
 
     private void EnumerateAllDevices()

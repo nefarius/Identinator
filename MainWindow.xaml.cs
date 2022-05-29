@@ -41,6 +41,11 @@ public partial class MainWindow : MetroWindow
 
     public MainWindow()
     {
+        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        {
+            MiniDumper.Write("Identinator.dmp");
+        };
+
         // Speed up appearance of tool tips
         ToolTipService.InitialShowDelayProperty.OverrideMetadata(
             typeof(FrameworkElement), new FrameworkPropertyMetadata(100));

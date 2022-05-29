@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,7 +43,7 @@ public partial class MainWindow : MetroWindow
     {
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
 
-            // Speed up appearance of tool tips
+        // Speed up appearance of tool tips
         ToolTipService.InitialShowDelayProperty.OverrideMetadata(
             typeof(FrameworkElement), new FrameworkPropertyMetadata(100));
         ToolTipService.ShowDurationProperty.OverrideMetadata(
@@ -349,7 +348,8 @@ public partial class MainWindow : MetroWindow
 
     private void VersionButton_OnClick(object sender, RoutedEventArgs e)
     {
-        Process.Start("https://github.com/nefarius/Identinator/releases/latest");
+        Process.Start(new ProcessStartInfo("https://github.com/nefarius/Identinator/releases/latest")
+            { UseShellExecute = true });
     }
 
     #endregion

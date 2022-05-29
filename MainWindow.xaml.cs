@@ -194,14 +194,11 @@ public partial class MainWindow : MetroWindow
             Settings.Default.IsFirstRun = false;
         }
 
+        // Driver installer
         if (!_viewModel.FilterDriver.IsDriverInstalled)
         {
-            MainTabControl.SelectedIndex = 1;
-            await this.ShowMessageAsync("Filter driver not found",
-                @"It looks like the mandatory filter driver isn't installed. " +
-                @"Please install it using the upcoming dialog. " +
-                @"You may need to reboot your machine afterwards. "
-            );
+            var installer = new DriverInstallerChildWindow(this) { IsModal = true };
+            await this.ShowChildWindowAsync(installer);
         }
 
         _deviceListener.DeviceArrived += DeviceListenerOnDeviceArrived;
@@ -254,6 +251,15 @@ public partial class MainWindow : MetroWindow
         var button = sender as Button;
         button.IsEnabled = false;
 
+        await InstallDriver();
+
+        button.IsEnabled = true;
+
+        _viewModel.FilterDriver.Refresh();
+    }
+
+    public async Task InstallDriver()
+    {
         var controller = await this.ShowProgressAsync("Installation in progress", "Removing old driver packages");
 
         var infFile = EmbeddedFiles.First(pair => pair.Key.Contains(".inf", StringComparison.OrdinalIgnoreCase)).Key;
@@ -312,10 +318,6 @@ public partial class MainWindow : MetroWindow
                 "Driver installation failed, please reboot and retry."
             );
         }
-
-        button.IsEnabled = true;
-
-        _viewModel.FilterDriver.Refresh();
     }
 
     private async void UninstallDriver_OnClick(object sender, RoutedEventArgs e)

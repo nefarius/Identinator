@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.SimpleChildWindow;
+﻿using System.Windows;
+using MahApps.Metro.SimpleChildWindow;
 
 namespace Identinator.ChildWindows;
 
@@ -7,8 +8,23 @@ namespace Identinator.ChildWindows;
 /// </summary>
 public partial class DriverInstallerChildWindow : ChildWindow
 {
-    public DriverInstallerChildWindow()
+    private readonly MainWindow _parent;
+
+    public DriverInstallerChildWindow(MainWindow parent)
     {
+        _parent = parent;
+
         InitializeComponent();
+    }
+
+    private void Close_OnClick(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Shutdown();
+    }
+
+    private async void Install_OnClick(object sender, RoutedEventArgs e)
+    {
+        await _parent.InstallDriver();
+        Close();
     }
 }

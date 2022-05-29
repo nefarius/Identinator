@@ -54,9 +54,66 @@ public partial class MainWindow : MetroWindow
         InitializeComponent();
     }
 
-    private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    public async Task InstallDriver()
     {
-        MiniDumper.Write("Identinator.dmp");
+        var controller = await this.ShowProgressAsync("Installation in progress", "Removing old driver packages");
+
+        var infFile = EmbeddedFiles.First(pair => pair.Key.Contains(".inf", StringComparison.OrdinalIgnoreCase)).Key;
+
+        //
+        // Clean out driver store
+        // 
+        await Task.Run(() =>
+        {
+            foreach (var package in DriverStore.ExistingDrivers
+                         .Where(s => s.Contains("nssidswap", StringComparison.OrdinalIgnoreCase)))
+                DriverStore.RemoveDriver(package);
+        });
+
+        await Task.Delay(250);
+
+        controller.SetMessage("Extracting driver files");
+
+        var tempDirectory = await ExtractDriverFilesAsync();
+
+        var infPath = Path.Combine(tempDirectory, infFile);
+
+        controller.SetMessage(
+            "Installing filter driver. \r\n\r\n" +
+            "This can take up to a minute, please be patient. \r\n\r\n" +
+            "Some of your USB devices may power-cycle during this process, this is expected. ");
+
+        var installationResult = await Task.Run(() =>
+        {
+            var ret = Devcon.Install(infPath, out var rebootRequired);
+
+            return new { WasSuccessful = ret, RebootRequired = rebootRequired };
+        });
+
+        controller.SetMessage("Cleaning up temporary directory");
+
+        await Task.Delay(250);
+
+        Directory.Delete(tempDirectory, true);
+
+        await controller.CloseAsync();
+
+        if (installationResult.WasSuccessful)
+        {
+            if (installationResult.RebootRequired)
+                await this.ShowMessageAsync("Reboot required",
+                    @"The installation finished successfully, " +
+                    @"but a reboot is required for completion. Don't forget to do that ❤️");
+            else
+                await this.ShowMessageAsync("All done", "The installation finished successfully. Enjoy ❤️");
+        }
+        else
+        {
+            await this.ShowMessageAsync(
+                "Unexpected error occurred",
+                "Driver installation failed, please reboot and retry."
+            );
+        }
     }
 
     private void EnumerateAllDevices()
@@ -258,66 +315,9 @@ public partial class MainWindow : MetroWindow
         _viewModel.FilterDriver.Refresh();
     }
 
-    public async Task InstallDriver()
+    private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
-        var controller = await this.ShowProgressAsync("Installation in progress", "Removing old driver packages");
-
-        var infFile = EmbeddedFiles.First(pair => pair.Key.Contains(".inf", StringComparison.OrdinalIgnoreCase)).Key;
-
-        //
-        // Clean out driver store
-        // 
-        await Task.Run(() =>
-        {
-            foreach (var package in DriverStore.ExistingDrivers
-                         .Where(s => s.Contains("nssidswap", StringComparison.OrdinalIgnoreCase)))
-                DriverStore.RemoveDriver(package);
-        });
-
-        await Task.Delay(250);
-
-        controller.SetMessage("Extracting driver files");
-
-        var tempDirectory = await ExtractDriverFilesAsync();
-
-        var infPath = Path.Combine(tempDirectory, infFile);
-
-        controller.SetMessage(
-            "Installing filter driver. \r\n\r\n" +
-            "This can take up to a minute, please be patient. \r\n\r\n" +
-            "Some of your USB devices may power-cycle during this process, this is expected. ");
-
-        var installationResult = await Task.Run(() =>
-        {
-            var ret = Devcon.Install(infPath, out var rebootRequired);
-
-            return new { WasSuccessful = ret, RebootRequired = rebootRequired };
-        });
-
-        controller.SetMessage("Cleaning up temporary directory");
-
-        await Task.Delay(250);
-
-        Directory.Delete(tempDirectory, true);
-
-        await controller.CloseAsync();
-
-        if (installationResult.WasSuccessful)
-        {
-            if (installationResult.RebootRequired)
-                await this.ShowMessageAsync("Reboot required",
-                    @"The installation finished successfully, " +
-                    @"but a reboot is required for completion. Don't forget to do that ❤️");
-            else
-                await this.ShowMessageAsync("All done", "The installation finished successfully. Enjoy ❤️");
-        }
-        else
-        {
-            await this.ShowMessageAsync(
-                "Unexpected error occurred",
-                "Driver installation failed, please reboot and retry."
-            );
-        }
+        MiniDumper.Write("Identinator.dmp");
     }
 
     private async void UninstallDriver_OnClick(object sender, RoutedEventArgs e)

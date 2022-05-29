@@ -323,7 +323,7 @@
 
                                             <mah:ToggleSwitch Margin="10"
                                                       IsOn="{Binding RewriteSettings.OverrideCompatibleIds, Mode=TwoWay}">
-                                                Override Compatible IDs
+                                                Override Compatible IDs to WinUSB
                                             </mah:ToggleSwitch>
                                         </StackPanel>
                                     </Grid>

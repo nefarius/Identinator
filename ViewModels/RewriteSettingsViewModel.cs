@@ -111,6 +111,7 @@ internal class RewriteSettingsViewModel
         if (OverrideCompatibleIds)
             FilterDriver.SetCompatibleIds(key, new[]
             {
+                @"USB\MS_COMP_WINUSB",
                 @"USB\Class_FF&SubClass_5D&Prot_01",
                 @"USB\Class_FF&SubClass_5D",
                 @"USB\Class_FF"

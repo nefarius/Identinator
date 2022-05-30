@@ -49,7 +49,7 @@
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
 
-    <TabControl x:Name="MainTabControl">
+    <TabControl>
         <!-- Devices -->
         <TabItem Header="USB Devices">
             <Grid x:Name="MainGrid">

@@ -193,6 +193,9 @@
                                 <mah:ToggleSwitch IsOn="{Binding FilterDriver.IsEnabled, Mode=TwoWay}">
                                     Enable rewriting
                                 </mah:ToggleSwitch>
+                                <Button Margin="10,0,0,0" Click="ApplyAll_OnClick">
+                                    Apply all
+                                </Button>
                             </DockPanel>
                             <TextBlock Margin="0,5,0,0">
                                 The rewriting feature gets automatically disabled on each reboot.

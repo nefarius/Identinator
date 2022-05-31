@@ -8,6 +8,10 @@
 
 Please visit the official website for detailed documentation!
 
+## License
+
+Redistribution of binaries signed by Nefarius Software Solution e.U. is prohibited without prior written consent from the authors. Bundling Identinator or `nssidswap.sys` binaries within foreign packages is prohibited without prior written consent from the authors. For details see `LICENSE.md` file.
+
 ## 3rd party credits
 
 - [Material Design In XAML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)

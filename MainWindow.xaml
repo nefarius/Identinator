@@ -193,7 +193,7 @@
                                 <mah:ToggleSwitch IsOn="{Binding FilterDriver.IsEnabled, Mode=TwoWay}">
                                     Enable rewriting
                                 </mah:ToggleSwitch>
-                                <Button Margin="10,0,0,0" Click="ApplyAll_OnClick">
+                                <Button Margin="20,0,0,0" Click="ApplyAll_OnClick">
                                     Apply all
                                 </Button>
                             </DockPanel>

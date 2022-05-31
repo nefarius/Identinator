@@ -144,7 +144,7 @@
                                                                 SnapsToDevicePixels="True" />
                                                         <StackPanel>
                                                             <TreeView
-                                                                ItemsSource="{Binding Path=ChildDevices}">
+                                                                ItemsSource="{Binding Path=ChildNodes}">
                                                                 <TreeView.Resources>
                                                                     <DataTemplate
                                                                         DataType="{x:Type viewModels:UsbDevice}">

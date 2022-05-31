@@ -276,16 +276,16 @@ public partial class MainWindow : MetroWindow
 
     private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-        if (e.NewValue is not UsbDevice child)
+        if (e.NewValue is UsbDevice { IsHub: false } child)
         {
-            SelectedDeviceDetailsGrid.Visibility = Visibility.Collapsed;
-            PlaceholderGrid.Visibility = Visibility.Visible;
+            _viewModel.SelectedDevice = child;
+            SelectedDeviceDetailsGrid.Visibility = Visibility.Visible;
+            PlaceholderGrid.Visibility = Visibility.Collapsed;
             return;
         }
 
-        _viewModel.SelectedDevice = child;
-        SelectedDeviceDetailsGrid.Visibility = Visibility.Visible;
-        PlaceholderGrid.Visibility = Visibility.Collapsed;
+        SelectedDeviceDetailsGrid.Visibility = Visibility.Collapsed;
+        PlaceholderGrid.Visibility = Visibility.Visible;
     }
 
     private void ApplyChanges_OnClick(object sender, RoutedEventArgs e)
@@ -352,7 +352,7 @@ public partial class MainWindow : MetroWindow
     private void VersionButton_OnClick(object sender, RoutedEventArgs e)
     {
         Process.Start(new ProcessStartInfo("https://github.com/nefarius/Identinator/releases/latest")
-            { UseShellExecute = true });
+        { UseShellExecute = true });
     }
 
     #endregion

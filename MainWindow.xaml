@@ -69,6 +69,7 @@
                         SelectedItemChanged="TreeView_OnSelectedItemChanged">
                         <TreeView.Resources>
                             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                            <converters:ShowUsbDeviceItemsConverter x:Key="ShowUsbDeviceItemsConverter"/>
 
                             <!-- USB Host Controllers -->
                             <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHostController}"
@@ -98,7 +99,13 @@
                             </HierarchicalDataTemplate>
 
                             <!-- USB Devices -->
-                            <DataTemplate DataType="{x:Type viewModels:UsbDevice}">
+                            <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbDevice}">
+                                <HierarchicalDataTemplate.ItemsSource>
+                                    <MultiBinding Converter="{StaticResource ShowUsbDeviceItemsConverter}">
+                                        <Binding Path="ChildNodes"/>
+                                        <Binding Path="IsCompositeDevice"/>
+                                    </MultiBinding>
+                                </HierarchicalDataTemplate.ItemsSource>
                                 <DockPanel LastChildFill="False" ToolTipService.IsEnabled="True">
                                     <materialDesign:PackIcon 
                                         Margin="0,0,5,0"
@@ -163,7 +170,7 @@
                                         </ToolTip>
                                     </DockPanel.ToolTip>
                                 </DockPanel>
-                            </DataTemplate>
+                            </HierarchicalDataTemplate>
                         </TreeView.Resources>
                         <TreeView.ItemContainerStyle>
                             <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
@@ -243,7 +250,7 @@
                                         <Border BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2">
                                             <TreeView
                                                 Height="100"
-                                                ItemsSource="{Binding Path=ChildDevices}">
+                                                ItemsSource="{Binding Path=ChildNodes}">
                                                 <TreeView.Resources>
                                                     <DataTemplate DataType="{x:Type viewModels:UsbDevice}">
                                                         <StackPanel Orientation="Horizontal">

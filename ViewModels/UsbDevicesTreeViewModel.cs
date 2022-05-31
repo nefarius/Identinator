@@ -7,16 +7,11 @@ using PropertyChanged;
 
 namespace Identinator.ViewModels;
 
-internal interface IUsbHubChild
-{
-    PnPDevice Device { get; }
-}
-
 /// <summary>
 ///     Represents a USB device.
 /// </summary>
 [AddINotifyPropertyChangedInterface]
-internal class UsbDevice : IUsbHubChild
+internal class UsbDevice : IEquatable<UsbDevice>
 {
     public UsbDevice(PnPDevice device)
     {
@@ -47,6 +42,11 @@ internal class UsbDevice : IUsbHubChild
 
     public uint PortNumber => Device.GetProperty<uint>(DevicePropertyDevice.Address);
 
+    public bool IsHub { get; protected set; }
+
+    public bool IsCompositeDevice => "usbccgp".Equals(Device.GetProperty<string>(DevicePropertyDevice.EnumeratorName),
+        StringComparison.OrdinalIgnoreCase);
+
     /// <summary>
     ///     Indicates whether this device is online with rewritten IDs.
     /// </summary>
@@ -58,13 +58,13 @@ internal class UsbDevice : IUsbHubChild
                 return false;
 
             var origIds = Device.GetProperty<string[]>(FilterDriver.OriginalHardwareIdsProperty);
-            var curIds  = Device.GetProperty<string[]>(DevicePropertyDevice.HardwareIds);
+            var curIds = Device.GetProperty<string[]>(DevicePropertyDevice.HardwareIds);
 
             return !origIds.SequenceEqual(curIds);
         }
     }
 
-    public UsbDeviceCollection ChildDevices { get; } = new();
+    public UsbDeviceCollection ChildNodes { get; set; } = new();
 
     /// <summary>
     ///     The friendly name or description of the device.
@@ -84,9 +84,14 @@ internal class UsbDevice : IUsbHubChild
     public RewriteSettingsViewModel RewriteSettings { get; }
 
     /// <summary>
-    ///     The underlying <see cref="PnPDevice"/>.
+    ///     The underlying <see cref="PnPDevice" />.
     /// </summary>
     public PnPDevice Device { get; }
+
+    public bool Equals(UsbDevice? other)
+    {
+        return Equals(other?.Device, Device);
+    }
 
     public override string ToString()
     {
@@ -108,27 +113,28 @@ internal class UsbDevice : IUsbHubChild
 
             EnumerateChildren(usbDevice);
 
-            ChildDevices.Add(usbDevice);
+            ChildNodes.Add(usbDevice);
         }
     }
 }
 
 [AddINotifyPropertyChangedInterface]
-internal class UsbDeviceCollection : ObservableCollection<IUsbHubChild>
+internal class UsbDeviceCollection : ObservableCollection<UsbDevice>
 {
 }
 
 [AddINotifyPropertyChangedInterface]
-internal class UsbHub : IUsbHubChild
+internal class UsbHub : UsbDevice, IEquatable<UsbHub>
 {
-    public UsbHub(PnPDevice device)
+    public UsbHub(PnPDevice device) : base(device)
     {
-        Device = device;
+        IsHub = true;
     }
 
-    public UsbDeviceCollection ChildNodes { get; set; } = new();
-
-    public PnPDevice Device { get; }
+    public bool Equals(UsbHub? other)
+    {
+        return Equals(other?.Device, Device);
+    }
 
     public override string ToString()
     {

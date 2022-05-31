@@ -99,7 +99,7 @@ internal static class FilterDriver
         var match = UsbHardwareIdRegex.Match(hardwareId);
 
         if (!match.Success)
-            throw new InvalidOperationException("Failed to parse hardware ID.");
+            return null;
 
         var enumerator = match.Groups[1].Value;
         var vidPid = match.Groups[2].Value;

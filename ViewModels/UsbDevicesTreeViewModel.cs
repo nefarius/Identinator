@@ -44,9 +44,6 @@ internal class UsbDevice : IEquatable<UsbDevice>
 
     public bool IsHub { get; protected set; }
 
-    public bool IsCompositeDevice => "usbccgp".Equals(Device.GetProperty<string>(DevicePropertyDevice.EnumeratorName),
-        StringComparison.OrdinalIgnoreCase);
-
     /// <summary>
     ///     Indicates whether this device is online with rewritten IDs.
     /// </summary>
@@ -98,7 +95,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
         return Name;
     }
 
-    private void EnumerateChildren(UsbDevice device)
+    private static void EnumerateChildren(UsbDevice device)
     {
         var childrenInstances = device.Device.GetProperty<string[]>(DevicePropertyDevice.Children);
 
@@ -108,12 +105,20 @@ internal class UsbDevice : IEquatable<UsbDevice>
         foreach (var childId in childrenInstances)
         {
             var childDevice = PnPDevice.GetDeviceByInstanceId(childId);
+            
+            var service = childDevice.GetProperty<string>(DevicePropertyDevice.Service);
 
-            var usbDevice = new UsbDevice(childDevice);
-
-            EnumerateChildren(usbDevice);
-
-            ChildNodes.Add(usbDevice);
+            if (service is not null && service.StartsWith("USBHUB", StringComparison.OrdinalIgnoreCase))
+            {
+                var usbHub = new UsbHub(childDevice);
+                EnumerateChildren(usbHub);
+                device.ChildNodes.Add(usbHub);
+            }
+            else
+            {
+                var usbDevice = new UsbDevice(childDevice);
+                device.ChildNodes.Add(usbDevice);
+            }
         }
     }
 }

@@ -137,9 +137,7 @@ public partial class MainWindow : MetroWindow
                 {
                     var hubDevice = PnPDevice.GetDeviceByInstanceId(hubInstanceId);
                     var hub = new UsbHub(hubDevice);
-
-                    EnumerateUsbHub(hub);
-
+                    
                     hostController.UsbHubs.Add(hub);
                 }
 
@@ -153,33 +151,6 @@ public partial class MainWindow : MetroWindow
     private void DeviceListenerOnDeviceChanged(DeviceEventArgs obj)
     {
         Dispatcher.Invoke(EnumerateAllDevices);
-    }
-
-    private static void EnumerateUsbHub(UsbHub hub)
-    {
-        var hubChildren = hub.Device.GetProperty<string[]>(DevicePropertyDevice.Children);
-
-        if (hubChildren is null)
-            return;
-
-        foreach (var hubChildInstanceId in hubChildren)
-        {
-            var hubChildDevice = PnPDevice.GetDeviceByInstanceId(hubChildInstanceId);
-
-            var service = hubChildDevice.GetProperty<string>(DevicePropertyDevice.Service);
-
-            if (service is not null && service.StartsWith("USBHUB", StringComparison.OrdinalIgnoreCase))
-            {
-                var hubDevice = new UsbHub(hubChildDevice);
-                EnumerateUsbHub(hubDevice);
-                hub.ChildNodes.Add(hubDevice);
-                continue;
-            }
-
-            var usbDevice = new UsbDevice(hubChildDevice);
-
-            hub.ChildNodes.Add(usbDevice);
-        }
     }
 
     /// <summary>

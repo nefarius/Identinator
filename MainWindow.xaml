@@ -69,7 +69,7 @@
                         SelectedItemChanged="TreeView_OnSelectedItemChanged">
                         <TreeView.Resources>
                             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                            <converters:ShowUsbDeviceItemsConverter x:Key="ShowUsbDeviceItemsConverter"/>
+                            <converters:UsbDeviceConverter x:Key="UsbDeviceConverter"/>
 
                             <!-- USB Host Controllers -->
                             <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHostController}"
@@ -90,8 +90,10 @@
                             </HierarchicalDataTemplate>
 
                             <!-- Nested USB Hubs-->
-                            <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHub}"
-                                                      ItemsSource="{Binding ChildNodes}">
+                            <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHub}">
+                                <HierarchicalDataTemplate.ItemsSource>
+                                    <Binding Path="ChildNodes" Converter="{StaticResource UsbDeviceConverter}"/>
+                                </HierarchicalDataTemplate.ItemsSource>
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Usb" Margin="0,0,5,0" />
                                     <TextBlock Text="{Binding }" />
@@ -101,10 +103,7 @@
                             <!-- USB Devices -->
                             <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbDevice}">
                                 <HierarchicalDataTemplate.ItemsSource>
-                                    <MultiBinding Converter="{StaticResource ShowUsbDeviceItemsConverter}">
-                                        <Binding Path="ChildNodes"/>
-                                        <Binding Path="IsCompositeDevice"/>
-                                    </MultiBinding>
+                                    <Binding Path="ChildNodes" Converter="{StaticResource UsbDeviceConverter}"/>
                                 </HierarchicalDataTemplate.ItemsSource>
                                 <DockPanel LastChildFill="False" ToolTipService.IsEnabled="True">
                                     <materialDesign:PackIcon 

@@ -2,6 +2,12 @@
 
 # Nefarius' Identinator
 
+⚠️ **UNFORGIVING SOFTWARE AHEAD, USE WITH EXTRA CARE** ⚠️
+
+## Documentation: [vigem.org/projects/Identinator/](https://vigem.org/projects/Identinator/)
+
+Please visit the official website for detailed documentation!
+
 ## 3rd party credits
 
 - [Material Design In XAML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)

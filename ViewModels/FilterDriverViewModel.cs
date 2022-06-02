@@ -17,13 +17,13 @@ namespace Identinator.ViewModels;
 [AddINotifyPropertyChangedInterface]
 internal class FilterDriver
 {
-    private readonly RegistryKey? ServiceParameters;
+    private readonly RegistryKey? _serviceParameters;
 
     public static readonly Regex UsbHardwareIdRegex = new(@"(USB)\\(VID_([a-fA-F0-9]+)&PID_([a-fA-F0-9]+).*)");
 
     public FilterDriver()
     {
-        ServiceParameters =
+        _serviceParameters =
             Registry.LocalMachine.OpenSubKey(
                 "SYSTEM\\CurrentControlSet\\Services\\nssidswap\\Parameters", true)!;
     }
@@ -53,14 +53,14 @@ internal class FilterDriver
 
     public bool IsEnabled
     {
-        get => ServiceParameters?.GetBool("Enabled", false) ?? false;
-        set => ServiceParameters?.SetBool("Enabled", value);
+        get => _serviceParameters?.GetBool("Enabled", false) ?? false;
+        set => _serviceParameters?.SetBool("Enabled", value);
     }
 
     public bool IsVerboseOn
     {
-        get => ServiceParameters?.GetBool("VerboseOn", false) ?? false;
-        set => ServiceParameters?.SetBool("VerboseOn", value);
+        get => _serviceParameters?.GetBool("VerboseOn", false) ?? false;
+        set => _serviceParameters?.SetBool("VerboseOn", value);
     }
 
     public RegistryKey AddOrUpdateRewriteEntry(string hardwareId, int portNumber = 0)
@@ -73,7 +73,7 @@ internal class FilterDriver
         var enumerator = match.Groups[1].Value;
         var vidPid = match.Groups[2].Value;
 
-        var enumeratorKey = ServiceParameters?.CreateSubKey(enumerator);
+        var enumeratorKey = _serviceParameters?.CreateSubKey(enumerator);
 
         if (enumeratorKey is null)
             throw new InvalidOperationException("Failed to create sub-key for enumerator.");
@@ -104,7 +104,7 @@ internal class FilterDriver
         var enumerator = match.Groups[1].Value;
         var vidPid = match.Groups[2].Value;
 
-        var enumeratorKey = ServiceParameters?.OpenSubKey(enumerator);
+        var enumeratorKey = _serviceParameters?.OpenSubKey(enumerator);
 
         var vidPidKey = enumeratorKey?.OpenSubKey(vidPid, true);
 

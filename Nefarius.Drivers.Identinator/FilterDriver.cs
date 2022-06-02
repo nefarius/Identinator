@@ -20,8 +20,14 @@ public class FilterDriver
                 "SYSTEM\\CurrentControlSet\\Services\\nssidswap\\Parameters", true)!;
     }
 
+    /// <summary>
+    ///     A regular expression for dissecting enumerator and VID/PID portion from a hardware ID.
+    /// </summary>
     public static Regex UsbHardwareIdRegex => new(@"(USB)\\(VID_([a-fA-F0-9]+)&PID_([a-fA-F0-9]+).*)");
 
+    /// <summary>
+    ///     A device interface GUID that is exposed additionally on all filtered devices.
+    /// </summary>
     public static Guid FilteredDeviceInterfaceId => Guid.Parse("{86431f5b-9f5a-48ce-8fbf-a537413ef358}");
 
     /// <summary>

@@ -19,7 +19,7 @@ internal static class FilterDriver
 {
     private static readonly RegistryKey? ServiceParameters;
 
-    public static readonly Regex UsbHardwareIdRegex = new(@"(USB)\\(VID_([a-fA-F0-9]+)&PID_([a-fA-F0-9]+))");
+    public static readonly Regex UsbHardwareIdRegex = new(@"(USB)\\(VID_([a-fA-F0-9]+)&PID_([a-fA-F0-9]+).*)");
 
     static FilterDriver()
     {

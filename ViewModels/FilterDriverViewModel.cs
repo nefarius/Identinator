@@ -15,13 +15,13 @@ using PropertyChanged;
 namespace Identinator.ViewModels;
 
 [AddINotifyPropertyChangedInterface]
-internal static class FilterDriver
+internal class FilterDriver
 {
-    private static readonly RegistryKey? ServiceParameters;
+    private readonly RegistryKey? ServiceParameters;
 
     public static readonly Regex UsbHardwareIdRegex = new(@"(USB)\\(VID_([a-fA-F0-9]+)&PID_([a-fA-F0-9]+).*)");
 
-    static FilterDriver()
+    public FilterDriver()
     {
         ServiceParameters =
             Registry.LocalMachine.OpenSubKey(
@@ -51,19 +51,19 @@ internal static class FilterDriver
         Guid.Parse("{e98e7b19-6b9b-4d6e-aa39-01d9c270d09b}"), 4,
         typeof(string));
 
-    public static bool IsEnabled
+    public bool IsEnabled
     {
         get => ServiceParameters?.GetBool("Enabled", false) ?? false;
         set => ServiceParameters?.SetBool("Enabled", value);
     }
 
-    public static bool IsVerboseOn
+    public bool IsVerboseOn
     {
         get => ServiceParameters?.GetBool("VerboseOn", false) ?? false;
         set => ServiceParameters?.SetBool("VerboseOn", value);
     }
 
-    public static RegistryKey AddOrUpdateRewriteEntry(string hardwareId, int portNumber = 0)
+    public RegistryKey AddOrUpdateRewriteEntry(string hardwareId, int portNumber = 0)
     {
         var match = UsbHardwareIdRegex.Match(hardwareId);
 
@@ -94,7 +94,7 @@ internal static class FilterDriver
         return portKey;
     }
 
-    public static RegistryKey? GetRewriteEntryFor(string hardwareId, int portNumber = 0)
+    public RegistryKey? GetRewriteEntryFor(string hardwareId, int portNumber = 0)
     {
         var match = UsbHardwareIdRegex.Match(hardwareId);
 
@@ -116,17 +116,17 @@ internal static class FilterDriver
         return portKey ?? vidPidKey;
     }
 
-    public static bool GetReplace(RegistryKey? parentKey)
+    public bool GetReplace(RegistryKey? parentKey)
     {
         return parentKey is not null && parentKey.GetBool("Replace", false);
     }
 
-    public static void SetReplace(RegistryKey parentKey, bool value)
+    public void SetReplace(RegistryKey parentKey, bool value)
     {
         parentKey.SetBool("Replace", value);
     }
 
-    public static IEnumerable<string> GetHardwareIds(RegistryKey? parentKey)
+    public IEnumerable<string> GetHardwareIds(RegistryKey? parentKey)
     {
         if (parentKey is null)
             return Enumerable.Empty<string>();
@@ -134,12 +134,12 @@ internal static class FilterDriver
         return parentKey.GetStringArray("HardwareIDs") ?? Enumerable.Empty<string>();
     }
 
-    public static void SetHardwareIds(RegistryKey parentKey, IEnumerable<string> value)
+    public void SetHardwareIds(RegistryKey parentKey, IEnumerable<string> value)
     {
         parentKey.SetStringArray("HardwareIDs", value);
     }
 
-    public static IEnumerable<string> GetCompatibleIds(RegistryKey? parentKey)
+    public IEnumerable<string> GetCompatibleIds(RegistryKey? parentKey)
     {
         if (parentKey is null)
             return Enumerable.Empty<string>();
@@ -147,17 +147,17 @@ internal static class FilterDriver
         return parentKey.GetStringArray("CompatibleIDs") ?? Enumerable.Empty<string>();
     }
 
-    public static void SetCompatibleIds(RegistryKey parentKey, IEnumerable<string> value)
+    public void SetCompatibleIds(RegistryKey parentKey, IEnumerable<string> value)
     {
         parentKey.SetStringArray("CompatibleIDs", value);
     }
 
-    public static string? GetDeviceId(RegistryKey? parentKey)
+    public string? GetDeviceId(RegistryKey? parentKey)
     {
         return parentKey?.GetString("DeviceID", string.Empty);
     }
 
-    public static void SetDeviceId(RegistryKey parentKey, string value)
+    public void SetDeviceId(RegistryKey parentKey, string value)
     {
         parentKey.SetString("DeviceID", value);
     }
@@ -170,14 +170,16 @@ internal class FilterDriverViewModel : INotifyPropertyChanged
     /// </summary>
     private static readonly Regex DriverVersionRegex =
         new(@"^DriverVer *=.*,(\d*\.\d*\.\d*\.\d*)", RegexOptions.Multiline);
-    
+
+    private readonly FilterDriver _driver = new();
+
     /// <summary>
     ///     Gets or sets whether the global rewriting feature is enabled or disabled.
     /// </summary>
     public bool IsEnabled
     {
-        get => FilterDriver.IsEnabled;
-        set => FilterDriver.IsEnabled = value;
+        get => _driver.IsEnabled;
+        set => _driver.IsEnabled = value;
     }
 
     /// <summary>
@@ -185,8 +187,8 @@ internal class FilterDriverViewModel : INotifyPropertyChanged
     /// </summary>
     public bool IsVerboseOn
     {
-        get => FilterDriver.IsVerboseOn;
-        set => FilterDriver.IsVerboseOn = value;
+        get => _driver.IsVerboseOn;
+        set => _driver.IsVerboseOn = value;
     }
 
     /// <summary>

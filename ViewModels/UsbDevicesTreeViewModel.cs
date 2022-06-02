@@ -36,12 +36,24 @@ internal class UsbDevice : IEquatable<UsbDevice>
         Device.GetProperty<string[]>(FilterDriver.OriginalCompatibleIdsProperty)?.ToList() ??
         Device.GetProperty<string[]>(DevicePropertyDevice.CompatibleIds)?.ToList();
 
+    /// <summary>
+    ///     The device class name.
+    /// </summary>
     public string Class => Device.GetProperty<string>(DevicePropertyDevice.Class) ?? "<None>";
 
+    /// <summary>
+    ///     The enumerator name.
+    /// </summary>
     public string Enumerator => Device.GetProperty<string>(DevicePropertyDevice.EnumeratorName);
 
+    /// <summary>
+    ///     The port number on the hub this device is connected to.
+    /// </summary>
     public uint PortNumber => Device.GetProperty<uint>(DevicePropertyDevice.Address);
 
+    /// <summary>
+    ///     True if this device is a hub.
+    /// </summary>
     public bool IsHub { get; protected set; }
 
     /// <summary>
@@ -61,6 +73,14 @@ internal class UsbDevice : IEquatable<UsbDevice>
         }
     }
 
+    /// <summary>
+    ///     True if this device is the last USB device in the chain of siblings.
+    /// </summary>
+    public bool IsLowestUsbChild => !ChildNodes.Any(usb => usb.Enumerator.Equals("USB"));
+
+    /// <summary>
+    ///     List of children to this device, if any.
+    /// </summary>
     public UsbDeviceCollection ChildNodes { get; set; } = new();
 
     /// <summary>
@@ -70,14 +90,17 @@ internal class UsbDevice : IEquatable<UsbDevice>
     {
         get
         {
-            /* not all devices have this property set, so attempt to read */
+            /* not all devices have this property set, so attempt to read... */
             var name = Device.GetProperty<string>(DevicePropertyDevice.FriendlyName);
 
+            /* ...and fall back on description (always populated) */
             return name ?? Device.GetProperty<string>(DevicePropertyDevice.DeviceDesc);
-            /* and fall back on description (always populated) */
         }
     }
 
+    /// <summary>
+    ///     Rewrite settings of this device.
+    /// </summary>
     public RewriteSettingsViewModel RewriteSettings { get; }
 
     /// <summary>
@@ -105,7 +128,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
         foreach (var childId in childrenInstances)
         {
             var childDevice = PnPDevice.GetDeviceByInstanceId(childId);
-            
+
             var service = childDevice.GetProperty<string>(DevicePropertyDevice.Service);
 
             if (service is not null && service.StartsWith("USBHUB", StringComparison.OrdinalIgnoreCase))

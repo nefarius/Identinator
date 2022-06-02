@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Nefarius.Drivers.Identinator;
 using PropertyChanged;
 
 namespace Identinator.ViewModels;
@@ -20,13 +21,13 @@ internal class RewriteSettingsViewModel
         if (!Equals(_device.Enumerator, "USB"))
             return;
 
-        var key = _driver.GetRewriteEntryFor(_device.HardwareIds.First(),
+        var entry = _driver.GetRewriteEntryFor(_device.PrimaryHardwareId,
             (int)_device.PortNumber);
 
-        if (key is null)
+        if (entry is null)
             return;
 
-        var hwIds = _driver.GetHardwareIds(key).ToList();
+        var hwIds = entry.HardwareIds.ToList();
 
         if (!hwIds.Any())
             return;
@@ -48,39 +49,34 @@ internal class RewriteSettingsViewModel
         if (ushort.TryParse(pid, NumberStyles.AllowHexSpecifier, null, out var pidValue))
             ProductId = pidValue.ToString("X4");
 
-        OverrideCompatibleIds = _driver.GetCompatibleIds(key).Any();
+        OverrideCompatibleIds = entry.CompatibleIds.Any();
     }
 
     public string? DeviceId
     {
-        get => _driver.GetDeviceId(_driver.GetRewriteEntryFor(_device.HardwareIds.First(),
-            (int)_device.PortNumber));
-        set => _driver.SetDeviceId(
-            _driver.AddOrUpdateRewriteEntry(_device.HardwareIds.First(), (int)_device.PortNumber), value);
+        get => _driver.GetRewriteEntryFor(_device.PrimaryHardwareId, (int)_device.PortNumber)?.DeviceId;
+        set => _driver.AddOrUpdateRewriteEntry(_device.PrimaryHardwareId, (int)_device.PortNumber).DeviceId = value;
     }
 
     public IEnumerable<string>? HardwareIds
     {
-        get => _driver.GetHardwareIds(_driver.GetRewriteEntryFor(_device.HardwareIds.First(),
-            (int)_device.PortNumber));
-        set => _driver.SetHardwareIds(
-            _driver.AddOrUpdateRewriteEntry(_device.HardwareIds.First(), (int)_device.PortNumber), value);
+        get => _driver.GetRewriteEntryFor(_device.PrimaryHardwareId, (int)_device.PortNumber)?.HardwareIds;
+        set => _driver.AddOrUpdateRewriteEntry(_device.PrimaryHardwareId, (int)_device.PortNumber).HardwareIds =
+            value;
     }
 
     public IEnumerable<string>? CompatibleIds
     {
-        get => _driver.GetCompatibleIds(_driver.GetRewriteEntryFor(_device.HardwareIds.First(),
-            (int)_device.PortNumber));
-        set => _driver.SetCompatibleIds(
-            _driver.AddOrUpdateRewriteEntry(_device.HardwareIds.First(), (int)_device.PortNumber), value);
+        get => _driver.GetRewriteEntryFor(_device.PrimaryHardwareId, (int)_device.PortNumber)?.CompatibleIds;
+        set => _driver.AddOrUpdateRewriteEntry(_device.PrimaryHardwareId, (int)_device.PortNumber).CompatibleIds =
+            value;
     }
 
     public bool Replace
     {
-        get => _driver.GetReplace(_driver.GetRewriteEntryFor(_device.HardwareIds.First(),
-            (int)_device.PortNumber));
-        set => _driver.SetReplace(
-            _driver.AddOrUpdateRewriteEntry(_device.HardwareIds.First(), (int)_device.PortNumber), value);
+        get => _driver.GetRewriteEntryFor(_device.PrimaryHardwareId, (int)_device.PortNumber)?.IsReplacingEnabled ?? false;
+        set => _driver.AddOrUpdateRewriteEntry(_device.PrimaryHardwareId, (int)_device.PortNumber)
+            .IsReplacingEnabled = value;
     }
 
     public string VendorId { get; set; } = new Random().Next(0x1337, ushort.MaxValue).ToString("X4");
@@ -95,10 +91,10 @@ internal class RewriteSettingsViewModel
     {
         NewHardwareId = $@"USB\VID_{VendorId}&PID_{ProductId}";
 
-        var key = _driver.AddOrUpdateRewriteEntry(_device.HardwareIds.First(), (int)_device.PortNumber);
+        var entry = _driver.AddOrUpdateRewriteEntry(_device.PrimaryHardwareId, (int)_device.PortNumber);
 
-        _driver.SetHardwareIds(key, new[] { NewHardwareId });
-        _driver.SetDeviceId(key, NewHardwareId);
+        entry.HardwareIds = new[] { NewHardwareId };
+        entry.DeviceId = NewHardwareId;
     }
 
     private void OnProductIdChanged()
@@ -108,18 +104,18 @@ internal class RewriteSettingsViewModel
 
     private void OnOverrideCompatibleIdsChanged()
     {
-        var key = _driver.AddOrUpdateRewriteEntry(_device.HardwareIds.First(), (int)_device.PortNumber);
+        var entry = _driver.AddOrUpdateRewriteEntry(_device.PrimaryHardwareId, (int)_device.PortNumber);
 
         if (OverrideCompatibleIds)
-            _driver.SetCompatibleIds(key, new[]
+            entry.CompatibleIds = new[]
             {
                 @"USB\MS_COMP_WINUSB",
                 @"USB\Class_FF&SubClass_5D&Prot_01",
                 @"USB\Class_FF&SubClass_5D",
                 @"USB\Class_FF"
-            });
+            };
         else
-            key.DeleteValue("CompatibleIDs", false);
+            entry.CompatibleIds = null;
     }
 
     private void OnReplaceChanged()

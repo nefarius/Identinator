@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>assets\NSS-128x128.ico</ApplicationIcon>
+    <ApplicationIcon>..\assets\NSS-128x128.ico</ApplicationIcon>
     <Authors>Benjamin Höglinger-Stelzer</Authors>
     <Company>Nefarius Software Solutions e.U.</Company>
     <Copyright>(C) 2022 Benjamin Höglinger-Stelzer</Copyright>
@@ -21,34 +21,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Nefarius.Drivers.Identinator\**" />
-    <EmbeddedResource Remove="Nefarius.Drivers.Identinator\**" />
-    <None Remove="Nefarius.Drivers.Identinator\**" />
-    <Page Remove="Nefarius.Drivers.Identinator\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="drivers\nssidswap_x64\LICENSE" />
-    <None Remove="drivers\nssidswap_x64\nssidswap.cat" />
-    <None Remove="drivers\nssidswap_x64\nssidswap.inf" />
-    <None Remove="drivers\nssidswap_x64\nssidswap.sys" />
+    <None Remove="$(ProjectDir)\drivers\nssidswap_x64\LICENSE" />
+    <None Remove="$(ProjectDir)\drivers\nssidswap_x64\nssidswap.cat" />
+    <None Remove="$(ProjectDir)\drivers\nssidswap_x64\nssidswap.inf" />
+    <None Remove="$(ProjectDir)\drivers\nssidswap_x64\nssidswap.sys" />
     <None Remove="favicon.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="assets\NSS-128x128.ico" />
-    <Content Include="assets\NSS-128x128.ico" />
+    <Content Include="$(SolutionDir)\assets\NSS-128x128.ico" />
+    <Content Include="$(SolutionDir)\assets\NSS-128x128.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="drivers\nssidswap_x64\LICENSE" />
-    <EmbeddedResource Include="drivers\nssidswap_x64\nssidswap.cat" />
-    <EmbeddedResource Include="drivers\nssidswap_x64\nssidswap.inf" />
-    <EmbeddedResource Include="drivers\nssidswap_x64\nssidswap.sys" />
+    <EmbeddedResource Include="$(ProjectDir)\drivers\nssidswap_x64\LICENSE" />
+    <EmbeddedResource Include="$(ProjectDir)\drivers\nssidswap_x64\nssidswap.cat" />
+    <EmbeddedResource Include="$(ProjectDir)\drivers\nssidswap_x64\nssidswap.inf" />
+    <EmbeddedResource Include="$(ProjectDir)\drivers\nssidswap_x64\nssidswap.sys" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="assets\NSS-128x128.png" />
+    <Resource Include="$(SolutionDir)\assets\NSS-128x128.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,7 +61,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Nefarius.Drivers.Identinator\Nefarius.Drivers.Identinator.csproj" />
+    <ProjectReference Include="$(SolutionDir)\Nefarius.Drivers.Identinator\Nefarius.Drivers.Identinator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

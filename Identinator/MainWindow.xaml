@@ -27,7 +27,7 @@
                  Width="{util:SettingBinding Width}"
                  Left="{util:SettingBinding Left}"
                  ToolTip="{util:SettingBinding Top}"
-                 Icon="pack://application:,,,/assets/NSS-128x128.png">
+                 Icon="pack://application:,,,/NSS-128x128.png">
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>

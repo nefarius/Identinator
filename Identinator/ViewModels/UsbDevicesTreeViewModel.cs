@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Nefarius.Drivers.Identinator;
 using Nefarius.Utilities.DeviceManagement.PnP;
 using PropertyChanged;
 
@@ -28,6 +29,8 @@ internal class UsbDevice : IEquatable<UsbDevice>
     public List<string>? HardwareIds =>
         Device.GetProperty<string[]>(FilterDriver.OriginalHardwareIdsProperty)?.ToList() ??
         Device.GetProperty<string[]>(DevicePropertyDevice.HardwareIds)?.ToList();
+
+    public string PrimaryHardwareId => HardwareIds?.First() ?? string.Empty;
 
     /// <summary>
     ///     The Compatible IDs of this device.

@@ -361,4 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/drivers/nssidswap_x64
+/Identinator/drivers/nssidswap_x64

@@ -39,10 +39,16 @@ public sealed class RewriteEntry : IDisposable
     /// <summary>
     ///     One or more compatible IDs that will overwrite the existing ones.
     /// </summary>
-    public IEnumerable<string> CompatibleIds
+    public IEnumerable<string>? CompatibleIds
     {
         get => _key.GetStringArray("CompatibleIDs") ?? Enumerable.Empty<string>();
-        set => _key.SetStringArray("CompatibleIDs", value);
+        set
+        {
+            if (value == null)
+                _key.DeleteValue("CompatibleIDs", false);
+            else
+                _key.SetStringArray("CompatibleIDs", value);
+        }
     }
 
     /// <summary>
@@ -54,7 +60,7 @@ public sealed class RewriteEntry : IDisposable
         set => _key.SetString("DeviceID", value);
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Dispose()
     {
         _key.Dispose();

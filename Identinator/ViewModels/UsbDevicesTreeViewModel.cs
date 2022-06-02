@@ -101,10 +101,8 @@ internal class UsbDevice : IEquatable<UsbDevice>
 
                 var service = compositeDevice.GetProperty<string>(DevicePropertyDevice.Service);
 
-                if (service is not null)
-                    // if one parent is a composite device, use their port number instead
-                    if (service.Equals("usbccgp", StringComparison.OrdinalIgnoreCase))
-                        return true;
+                if (service is not null && service.Equals("usbccgp", StringComparison.OrdinalIgnoreCase))
+                    return true;
 
                 compositeDevice = PnPDevice.GetDeviceByInstanceId(parentId);
             }

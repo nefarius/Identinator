@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identinator", "Identinator.csproj", "{685D8692-C9FA-4D6E-917B-80A9512B538C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nefarius.Drivers.Identinator", "Nefarius.Drivers.Identinator\Nefarius.Drivers.Identinator.csproj", "{F8B758E1-67B3-447A-9CC3-994D4B6957C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{685D8692-C9FA-4D6E-917B-80A9512B538C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{685D8692-C9FA-4D6E-917B-80A9512B538C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{685D8692-C9FA-4D6E-917B-80A9512B538C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8B758E1-67B3-447A-9CC3-994D4B6957C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8B758E1-67B3-447A-9CC3-994D4B6957C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8B758E1-67B3-447A-9CC3-994D4B6957C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8B758E1-67B3-447A-9CC3-994D4B6957C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

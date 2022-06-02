@@ -21,6 +21,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Nefarius.Drivers.Identinator\**" />
+    <EmbeddedResource Remove="Nefarius.Drivers.Identinator\**" />
+    <None Remove="Nefarius.Drivers.Identinator\**" />
+    <Page Remove="Nefarius.Drivers.Identinator\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="drivers\nssidswap_x64\LICENSE" />
     <None Remove="drivers\nssidswap_x64\nssidswap.cat" />
     <None Remove="drivers\nssidswap_x64\nssidswap.inf" />
@@ -58,6 +65,10 @@
     <PackageReference Include="GitVersion.MsBuild" Version="5.10.3">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Nefarius.Drivers.Identinator\Nefarius.Drivers.Identinator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

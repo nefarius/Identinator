@@ -14,6 +14,11 @@ using PropertyChanged;
 
 namespace Identinator.ViewModels;
 
+internal class RewriteEntry
+{
+
+}
+
 [AddINotifyPropertyChangedInterface]
 internal class FilterDriver
 {

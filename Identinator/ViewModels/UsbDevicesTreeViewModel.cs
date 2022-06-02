@@ -82,6 +82,38 @@ internal class UsbDevice : IEquatable<UsbDevice>
     public bool IsLowestUsbChild => !ChildNodes.Any(usb => usb.Enumerator.Equals("USB"));
 
     /// <summary>
+    ///     True if this device is a child of a composite device, false otherwise.
+    /// </summary>
+    public bool HasCompositeParent
+    {
+        get
+        {
+            var compositeDevice = PnPDevice
+                .GetDeviceByInstanceId(Device.GetProperty<string>(DevicePropertyDevice.Parent));
+
+            // find root hub
+            while (compositeDevice is not null)
+            {
+                var parentId = compositeDevice.GetProperty<string>(DevicePropertyDevice.Parent);
+
+                if (parentId is null)
+                    break;
+
+                var service = compositeDevice.GetProperty<string>(DevicePropertyDevice.Service);
+
+                if (service is not null)
+                    // if one parent is a composite device, use their port number instead
+                    if (service.Equals("usbccgp", StringComparison.OrdinalIgnoreCase))
+                        return true;
+
+                compositeDevice = PnPDevice.GetDeviceByInstanceId(parentId);
+            }
+
+            return false;
+        }
+    }
+
+    /// <summary>
     ///     List of children to this device, if any.
     /// </summary>
     public UsbDeviceCollection ChildNodes { get; set; } = new();

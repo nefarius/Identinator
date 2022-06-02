@@ -47,12 +47,18 @@ public class FilterDriver
 
     public bool IsDriverServiceKeyPresent => _serviceParameters is not null;
 
+    /// <summary>
+    ///     True if the global rewrite functionality is enabled, false otherwise.
+    /// </summary>
     public bool IsEnabled
     {
         get => _serviceParameters?.GetBool("Enabled", false) ?? false;
         set => _serviceParameters?.SetBool("Enabled", value);
     }
 
+    /// <summary>
+    ///     True if verbose WPP tracing messages are enabled, false otherwise.
+    /// </summary>
     public bool IsVerboseOn
     {
         get => _serviceParameters?.GetBool("VerboseOn", false) ?? false;

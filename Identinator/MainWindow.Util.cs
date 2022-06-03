@@ -143,22 +143,35 @@ public partial class MainWindow
         }
         else
         {
-            var lhs = GetAllChildDevicesFor(_viewModel.UsbHostControllers).ToList();
+            var lhs = GetAllChildDevicesFor(_viewModel.UsbHostControllers).Where(d => d.IsConnected).ToList();
             var rhs = GetAllChildDevicesFor(hostControllers).ToList();
 
             var added = rhs.Except(lhs).ToList();
-            var removed = lhs.Except(rhs).ToList();
 
             var hubs = GetAllHubDevicesFor(_viewModel.UsbHostControllers).ToList();
 
-            foreach (var device in added.Where(d => d.HasCompositeParent))
+            foreach (var device in added.Where(d => d.HasCompositeParent || !d.IsConnected))
+            {
                 device.IsNewlyAttached = true;
+                device.IsConnected = true;
+            }
 
             foreach (var device in added.Where(d => !d.HasCompositeParent))
             {
                 var nodes = hubs.First(h => Equals(h, device.ParentHub)).ChildNodes;
 
-                nodes.Add(device);   
+                if (nodes.Contains(device))
+                    nodes.Remove(device);
+
+                nodes.Add(device);
+            }
+
+            var removed = lhs.Except(rhs).ToList();
+
+            foreach (var device in removed)
+            {
+                device.IsNewlyAttached = false;
+                device.IsConnected = false;
             }
 
             CollectionViewSource.GetDefaultView(_viewModel.UsbHostControllers).Refresh();
@@ -170,8 +183,8 @@ public partial class MainWindow
         var devices = new List<UsbDevice>();
 
         foreach (var hostController in hostControllers)
-            foreach (var hub in hostController.UsbHubs)
-                devices.AddRange(GetAllChildDevices(hub));
+        foreach (var hub in hostController.UsbHubs)
+            devices.AddRange(GetAllChildDevices(hub));
 
         return devices;
     }

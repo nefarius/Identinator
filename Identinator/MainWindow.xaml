@@ -94,6 +94,13 @@
                                 <HierarchicalDataTemplate.ItemsSource>
                                     <Binding Path="ChildNodes" Converter="{StaticResource UsbDeviceConverter}"/>
                                 </HierarchicalDataTemplate.ItemsSource>
+                                <HierarchicalDataTemplate.ItemContainerStyle>
+                                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                        <Setter Property="IsEnabled" Value="{Binding IsConnected}"/>
+                                        <Setter Property="IsExpanded" Value="True" />
+                                    </Style>
+                                </HierarchicalDataTemplate.ItemContainerStyle>
+
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Usb" Margin="0,0,5,0" />
                                     <TextBlock Text="{Binding }" />
@@ -107,6 +114,7 @@
                                 </HierarchicalDataTemplate.ItemsSource>
                                 <HierarchicalDataTemplate.ItemContainerStyle>
                                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                        <Setter Property="IsEnabled" Value="{Binding IsConnected}"/>
                                         <Style.Resources>
                                             <Storyboard x:Key="Storyboard" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)" AutoReverse="True">
                                                 <ColorAnimation From="Transparent" To="ForestGreen" Duration="0:0:1" RepeatBehavior="4x"/>

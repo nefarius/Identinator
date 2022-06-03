@@ -98,7 +98,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
         get
         {
             var compositeDevice = PnPDevice
-                .GetDeviceByInstanceId(Device.GetProperty<string>(DevicePropertyDevice.Parent));
+                .GetDeviceByInstanceId(Device.GetProperty<string>(DevicePropertyDevice.Parent), DeviceLocationFlags.Phantom);
 
             // find root hub
             while (compositeDevice is not null)
@@ -124,6 +124,8 @@ internal class UsbDevice : IEquatable<UsbDevice>
     ///     True if this device has arrived during runtime, false otherwise.
     /// </summary>
     public bool IsNewlyAttached { get; set; } = false;
+
+    public bool IsConnected { get; set; } = true;
 
     /// <summary>
     ///     List of children to this device, if any.

@@ -24,6 +24,9 @@ internal class UsbDevice : IEquatable<UsbDevice>
         RewriteSettings = new RewriteSettingsViewModel(this);
     }
 
+    /// <summary>
+    ///     The direct parent <see cref="UsbHub" /> (if any) of this device.
+    /// </summary>
     public UsbHub? ParentHub { get; }
 
     /// <summary>
@@ -33,6 +36,9 @@ internal class UsbDevice : IEquatable<UsbDevice>
         Device.GetProperty<string[]>(FilterDriver.OriginalHardwareIdsProperty)?.ToList() ??
         Device.GetProperty<string[]>(DevicePropertyDevice.HardwareIds)?.ToList();
 
+    /// <summary>
+    ///     The primary hardware ID.
+    /// </summary>
     public string PrimaryHardwareId => HardwareIds?.First() ?? string.Empty;
 
     /// <summary>
@@ -144,26 +150,35 @@ internal class UsbDevice : IEquatable<UsbDevice>
     /// </summary>
     public PnPDevice Device { get; }
 
+    /// <inheritdoc />
     public bool Equals(UsbDevice? other)
     {
         return Equals(other?.Device, Device);
     }
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         return Equals(obj as UsbDevice);
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Device.GetHashCode();
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return Name;
     }
 
+    /// <summary>
+    ///     Recursively enumerates the entire tree of child devices.
+    /// </summary>
+    /// <param name="parentHub">If non-null, the parent <see cref="UsbHub" />.</param>
+    /// <param name="device">The <see cref="UsbDevice" /> to enumerate.</param>
     private static void EnumerateChildren(UsbHub? parentHub, UsbDevice device)
     {
         var childrenInstances = device.Device.GetProperty<string[]>(DevicePropertyDevice.Children);
@@ -177,6 +192,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
 
             var service = childDevice.GetProperty<string>(DevicePropertyDevice.Service);
 
+            /* recursively enumerate a hub */
             if (service is not null && service.StartsWith("USBHUB", StringComparison.OrdinalIgnoreCase))
             {
                 var usbHub = new UsbHub(parentHub, childDevice);
@@ -185,7 +201,13 @@ internal class UsbDevice : IEquatable<UsbDevice>
             }
             else
             {
-                var usbDevice = new UsbDevice(parentHub ?? (UsbHub)device, childDevice);
+                var usbDevice = new UsbDevice(
+                    /* a device without a parent hub is a hub itself */
+                    parentHub ?? (UsbHub)device,
+                    childDevice
+                );
+
+                /* avoid duplicates */
                 if (!device.ChildNodes.Contains(usbDevice))
                     device.ChildNodes.Add(usbDevice);
             }
@@ -206,21 +228,25 @@ internal class UsbHub : UsbDevice, IEquatable<UsbHub>
         IsHub = true;
     }
 
+    /// <inheritdoc />
     public bool Equals(UsbHub? other)
     {
         return Equals(other?.Device, Device);
     }
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         return Equals(obj as UsbHub);
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Device.GetHashCode();
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return Device.GetProperty<string>(DevicePropertyDevice.FriendlyName) ??
@@ -245,6 +271,7 @@ internal class UsbHostController : IEquatable<UsbHostController>
 
     public PnPDevice Device { get; }
 
+    /// <inheritdoc />
     public bool Equals(UsbHostController? other)
     {
         if (ReferenceEquals(null, other)) return false;
@@ -252,12 +279,14 @@ internal class UsbHostController : IEquatable<UsbHostController>
         return Device.Equals(other.Device);
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return Device.GetProperty<string>(DevicePropertyDevice.FriendlyName) ??
                Device.GetProperty<string>(DevicePropertyDevice.DeviceDesc);
     }
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj)) return false;
@@ -266,6 +295,7 @@ internal class UsbHostController : IEquatable<UsbHostController>
         return Equals((UsbHostController)obj);
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         return Device.GetHashCode();

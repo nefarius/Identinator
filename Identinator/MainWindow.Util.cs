@@ -111,7 +111,7 @@ public partial class MainWindow
         var instance = 0;
 
         var hostControllers = new UsbHostControllerCollection();
-        
+
         while (Devcon.FindByInterfaceGuid(DeviceInterfaceIds.UsbHostController, out var device, instance++))
         {
             var hostController = new UsbHostController(device);
@@ -134,10 +134,49 @@ public partial class MainWindow
             hostControllers.Add(hostController);
         }
 
-        _viewModel.UsbHostControllers = hostControllers;
+        if (!_viewModel.UsbHostControllers.Any())
+            _viewModel.UsbHostControllers = hostControllers;
+        else
+        {
+            var lhs = GetAllChildDevicesFor(_viewModel.UsbHostControllers).ToList();
+            var rhs = GetAllChildDevicesFor(hostControllers).ToList();
+
+            var added = rhs.Except(lhs).ToList();
+            var removed = lhs.Except(rhs).ToList();
+
+            // TODO: finish implementation
+            _viewModel.UsbHostControllers = hostControllers;
+        }
 
         MainGrid.DataContext = _viewModel;
         FilterDriverGrid.DataContext = _viewModel.FilterDriver;
+    }
+
+    private static IEnumerable<UsbDevice> GetAllChildDevicesFor(UsbHostControllerCollection hostControllers)
+    {
+        var devices = new List<UsbDevice>();
+
+        foreach (var hostController in hostControllers)
+            foreach (var hub in hostController.UsbHubs)
+                devices.AddRange(GetAllChildDevices(hub));
+
+        return devices;
+    }
+
+    private static IEnumerable<UsbDevice> GetAllChildDevices(UsbDevice device)
+    {
+        var devices = new List<UsbDevice>();
+
+        if (!device.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
+
+        foreach (var childNode in device.ChildNodes)
+        {
+            devices.Add(childNode);
+            var children = GetAllChildDevices(childNode);
+            devices.AddRange(children);
+        }
+
+        return devices;
     }
 
     private static IEnumerable<UsbDevice> GetRewriteEnabledChildDevices(UsbDevice device)

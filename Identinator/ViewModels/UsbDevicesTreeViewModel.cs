@@ -146,6 +146,16 @@ internal class UsbDevice : IEquatable<UsbDevice>
         return Equals(other?.Device, Device);
     }
 
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as UsbDevice);
+    }
+
+    public override int GetHashCode()
+    {
+        return Device.GetHashCode();
+    }
+
     public override string ToString()
     {
         return Name;

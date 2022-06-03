@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using Identinator.ViewModels;
 using MahApps.Metro.Controls.Dialogs;
 using Nefarius.Utilities.DeviceManagement.Drivers;
@@ -152,8 +153,12 @@ public partial class MainWindow
 
             foreach (var device in added)
             {
-                hubs.First(h => Equals(h, device.ParentHub)).ChildNodes.Add(device);
+                var nodes = hubs.First(h => Equals(h, device.ParentHub)).ChildNodes;
+
+                nodes.Add(device);   
             }
+
+            CollectionViewSource.GetDefaultView(_viewModel.UsbHostControllers).Refresh();
         }
     }
 

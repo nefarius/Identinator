@@ -121,6 +121,11 @@ internal class UsbDevice : IEquatable<UsbDevice>
     }
 
     /// <summary>
+    ///     True if this device has arrived during runtime, false otherwise.
+    /// </summary>
+    public bool IsNewlyAttached { get; set; } = false;
+
+    /// <summary>
     ///     List of children to this device, if any.
     /// </summary>
     public UsbDeviceCollection ChildNodes { get; set; } = new();

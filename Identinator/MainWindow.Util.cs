@@ -146,12 +146,15 @@ public partial class MainWindow
             var lhs = GetAllChildDevicesFor(_viewModel.UsbHostControllers).ToList();
             var rhs = GetAllChildDevicesFor(hostControllers).ToList();
 
-            var added = rhs.Except(lhs).Where(d => !d.HasCompositeParent).ToList();
+            var added = rhs.Except(lhs).ToList();
             var removed = lhs.Except(rhs).ToList();
 
             var hubs = GetAllHubDevicesFor(_viewModel.UsbHostControllers).ToList();
 
-            foreach (var device in added)
+            foreach (var device in added.Where(d => d.HasCompositeParent))
+                device.IsNewlyAttached = true;
+
+            foreach (var device in added.Where(d => !d.HasCompositeParent))
             {
                 var nodes = hubs.First(h => Equals(h, device.ParentHub)).ChildNodes;
 

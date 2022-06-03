@@ -110,14 +110,14 @@ public partial class MainWindow
     {
         var instance = 0;
 
-        _viewModel.UsbHostControllers.Clear();
-
+        var hostControllers = new UsbHostControllerCollection();
+        
         while (Devcon.FindByInterfaceGuid(DeviceInterfaceIds.UsbHostController, out var device, instance++))
         {
             var hostController = new UsbHostController(device);
 
             /* TODO: UDE devices seem to get enumerated twice for some reason?! So skip one... */
-            if (_viewModel.UsbHostControllers.Contains(hostController))
+            if (hostControllers.Contains(hostController))
                 continue;
 
             var hostControllerChildren = device.GetProperty<string[]>(DevicePropertyDevice.Children);
@@ -131,8 +131,10 @@ public partial class MainWindow
                     hostController.UsbHubs.Add(hub);
                 }
 
-            _viewModel.UsbHostControllers.Add(hostController);
+            hostControllers.Add(hostController);
         }
+
+        _viewModel.UsbHostControllers = hostControllers;
 
         MainGrid.DataContext = _viewModel;
         FilterDriverGrid.DataContext = _viewModel.FilterDriver;

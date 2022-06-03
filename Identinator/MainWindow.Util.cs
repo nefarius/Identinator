@@ -135,7 +135,11 @@ public partial class MainWindow
         }
 
         if (!_viewModel.UsbHostControllers.Any())
+        {
             _viewModel.UsbHostControllers = hostControllers;
+            MainGrid.DataContext = _viewModel;
+            FilterDriverGrid.DataContext = _viewModel.FilterDriver;
+        }
         else
         {
             var lhs = GetAllChildDevicesFor(_viewModel.UsbHostControllers).ToList();
@@ -144,12 +148,13 @@ public partial class MainWindow
             var added = rhs.Except(lhs).Where(d => !d.HasCompositeParent).ToList();
             var removed = lhs.Except(rhs).ToList();
 
-            // TODO: finish implementation
-            _viewModel.UsbHostControllers = hostControllers;
-        }
+            var hubs = GetAllHubDevicesFor(_viewModel.UsbHostControllers).ToList();
 
-        MainGrid.DataContext = _viewModel;
-        FilterDriverGrid.DataContext = _viewModel.FilterDriver;
+            foreach (var device in added)
+            {
+                hubs.First(h => Equals(h, device.ParentHub)).ChildNodes.Add(device);
+            }
+        }
     }
 
     private static IEnumerable<UsbDevice> GetAllChildDevicesFor(UsbHostControllerCollection hostControllers)
@@ -159,6 +164,33 @@ public partial class MainWindow
         foreach (var hostController in hostControllers)
             foreach (var hub in hostController.UsbHubs)
                 devices.AddRange(GetAllChildDevices(hub));
+
+        return devices;
+    }
+
+    private static IEnumerable<UsbHub> GetAllHubDevicesFor(UsbHostControllerCollection hostControllers)
+    {
+        var devices = new List<UsbHub>();
+
+        foreach (var hostController in hostControllers)
+        foreach (var hub in hostController.UsbHubs)
+            devices.AddRange(GetAllHubDevices(hub));
+
+        return devices.Distinct();
+    }
+
+    private static IEnumerable<UsbHub> GetAllHubDevices(UsbHub hub)
+    {
+        var devices = new List<UsbHub> { hub };
+
+        if (!hub.ChildNodes.Any()) return devices;
+
+        foreach (var childNode in hub.ChildNodes.OfType<UsbHub>())
+        {
+            devices.Add(childNode);
+            var children = GetAllHubDevices(childNode);
+            devices.AddRange(children);
+        }
 
         return devices;
     }

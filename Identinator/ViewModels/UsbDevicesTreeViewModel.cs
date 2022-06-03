@@ -14,14 +14,17 @@ namespace Identinator.ViewModels;
 [AddINotifyPropertyChangedInterface]
 internal class UsbDevice : IEquatable<UsbDevice>
 {
-    public UsbDevice(PnPDevice device)
+    public UsbDevice(UsbHub? parentHub, PnPDevice device)
     {
         Device = device;
+        ParentHub = parentHub;
 
-        EnumerateChildren(this);
+        EnumerateChildren(parentHub, this);
 
         RewriteSettings = new RewriteSettingsViewModel(this);
     }
+
+    public UsbHub? ParentHub { get; }
 
     /// <summary>
     ///     The Hardware IDs of this device.
@@ -161,7 +164,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
         return Name;
     }
 
-    private static void EnumerateChildren(UsbDevice device)
+    private static void EnumerateChildren(UsbHub? parentHub, UsbDevice device)
     {
         var childrenInstances = device.Device.GetProperty<string[]>(DevicePropertyDevice.Children);
 
@@ -176,14 +179,15 @@ internal class UsbDevice : IEquatable<UsbDevice>
 
             if (service is not null && service.StartsWith("USBHUB", StringComparison.OrdinalIgnoreCase))
             {
-                var usbHub = new UsbHub(childDevice);
-                EnumerateChildren(usbHub);
+                var usbHub = new UsbHub(parentHub, childDevice);
+                EnumerateChildren(usbHub, usbHub);
                 device.ChildNodes.Add(usbHub);
             }
             else
             {
-                var usbDevice = new UsbDevice(childDevice);
-                device.ChildNodes.Add(usbDevice);
+                var usbDevice = new UsbDevice(parentHub ?? (UsbHub)device, childDevice);
+                if (!device.ChildNodes.Contains(usbDevice))
+                    device.ChildNodes.Add(usbDevice);
             }
         }
     }
@@ -197,7 +201,7 @@ internal class UsbDeviceCollection : ObservableCollection<UsbDevice>
 [AddINotifyPropertyChangedInterface]
 internal class UsbHub : UsbDevice, IEquatable<UsbHub>
 {
-    public UsbHub(PnPDevice device) : base(device)
+    public UsbHub(UsbHub? parentHub, PnPDevice device) : base(parentHub, device)
     {
         IsHub = true;
     }
@@ -205,6 +209,16 @@ internal class UsbHub : UsbDevice, IEquatable<UsbHub>
     public bool Equals(UsbHub? other)
     {
         return Equals(other?.Device, Device);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as UsbHub);
+    }
+
+    public override int GetHashCode()
+    {
+        return Device.GetHashCode();
     }
 
     public override string ToString()

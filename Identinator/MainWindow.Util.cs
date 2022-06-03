@@ -126,7 +126,7 @@ public partial class MainWindow
                 foreach (var hubInstanceId in hostControllerChildren)
                 {
                     var hubDevice = PnPDevice.GetDeviceByInstanceId(hubInstanceId);
-                    var hub = new UsbHub(hubDevice);
+                    var hub = new UsbHub(null, hubDevice);
 
                     hostController.UsbHubs.Add(hub);
                 }
@@ -141,7 +141,7 @@ public partial class MainWindow
             var lhs = GetAllChildDevicesFor(_viewModel.UsbHostControllers).ToList();
             var rhs = GetAllChildDevicesFor(hostControllers).ToList();
 
-            var added = rhs.Except(lhs).ToList();
+            var added = rhs.Except(lhs).Where(d => !d.HasCompositeParent).ToList();
             var removed = lhs.Except(rhs).ToList();
 
             // TODO: finish implementation

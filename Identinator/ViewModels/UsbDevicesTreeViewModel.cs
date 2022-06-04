@@ -370,6 +370,17 @@ internal class UsbHostController : IEquatable<UsbHostController>
 [AddINotifyPropertyChangedInterface]
 internal class UsbHostControllerCollection : ObservableCollection<UsbHostController>
 {
+    public IEnumerable<UsbHub> GetAllHubDevicesFor()
+    {
+        var devices = new List<UsbHub>();
+
+        foreach (var hostController in this)
+        foreach (var hub in hostController.UsbHubs)
+            devices.AddRange(hub.GetAllHubDevices());
+
+        return devices.Distinct();
+    }
+
     public IEnumerable<UsbDevice> GetAllChildDevices()
     {
         var devices = new List<UsbDevice>();

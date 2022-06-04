@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -148,7 +147,7 @@ public partial class MainWindow
 
             var added = rhs.Except(lhs).ToList();
 
-            var hubs = GetAllHubDevicesFor(_viewModel.UsbHostControllers).ToList();
+            var hubs = _viewModel.UsbHostControllers.GetAllHubDevicesFor().ToList();
 
             foreach (var device in added.Where(d => d.HasCompositeParent || !d.IsConnected))
             {
@@ -176,16 +175,5 @@ public partial class MainWindow
 
             CollectionViewSource.GetDefaultView(_viewModel.UsbHostControllers).Refresh();
         }
-    }
-
-    private static IEnumerable<UsbHub> GetAllHubDevicesFor(UsbHostControllerCollection hostControllers)
-    {
-        var devices = new List<UsbHub>();
-
-        foreach (var hostController in hostControllers)
-        foreach (var hub in hostController.UsbHubs)
-            devices.AddRange(hub.GetAllHubDevices());
-
-        return devices.Distinct();
     }
 }

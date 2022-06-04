@@ -157,36 +157,42 @@ internal class UsbDevice : IEquatable<UsbDevice>
     /// </summary>
     public PnPDevice Device { get; }
 
-    public IEnumerable<UsbDevice> GetAllChildDevices()
+    public IEnumerable<UsbDevice> AllChildDevices
     {
-        var devices = new List<UsbDevice>();
-
-        if (!this.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
-
-        foreach (var childNode in this.ChildNodes)
+        get
         {
-            devices.Add(childNode);
-            var children = childNode.GetAllChildDevices();
-            devices.AddRange(children);
-        }
+            var devices = new List<UsbDevice>();
 
-        return devices;
+            if (!this.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
+
+            foreach (var childNode in this.ChildNodes)
+            {
+                devices.Add(childNode);
+                var children = childNode.AllChildDevices;
+                devices.AddRange(children);
+            }
+
+            return devices;
+        }
     }
 
-    public IEnumerable<UsbDevice> GetRewriteEnabledChildDevices()
+    public IEnumerable<UsbDevice> RewriteEnabledChildDevices
     {
-        var devices = new List<UsbDevice>();
-
-        if (!this.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
-
-        foreach (var childNode in this.ChildNodes.Where(d => d.RewriteSettings.Replace))
+        get
         {
-            devices.Add(childNode);
-            var children = childNode.GetRewriteEnabledChildDevices();
-            devices.AddRange(children);
-        }
+            var devices = new List<UsbDevice>();
 
-        return devices;
+            if (!this.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
+
+            foreach (var childNode in this.ChildNodes.Where(d => d.RewriteSettings.Replace))
+            {
+                devices.Add(childNode);
+                var children = childNode.RewriteEnabledChildDevices;
+                devices.AddRange(children);
+            }
+
+            return devices;
+        }
     }
 
     /// <inheritdoc />
@@ -267,20 +273,23 @@ internal class UsbHub : UsbDevice, IEquatable<UsbHub>
         IsHub = true;
     }
 
-    public IEnumerable<UsbHub> GetAllHubDevices()
+    public IEnumerable<UsbHub> AllHubDevices
     {
-        var devices = new List<UsbHub> { this };
-
-        if (!this.ChildNodes.Any()) return devices;
-
-        foreach (var childNode in this.ChildNodes.OfType<UsbHub>())
+        get
         {
-            devices.Add(childNode);
-            var children = childNode.GetAllHubDevices();
-            devices.AddRange(children);
-        }
+            var devices = new List<UsbHub> { this };
 
-        return devices;
+            if (!this.ChildNodes.Any()) return devices;
+
+            foreach (var childNode in this.ChildNodes.OfType<UsbHub>())
+            {
+                devices.Add(childNode);
+                var children = childNode.AllHubDevices;
+                devices.AddRange(children);
+            }
+
+            return devices;
+        }
     }
 
     /// <inheritdoc />
@@ -370,26 +379,32 @@ internal class UsbHostController : IEquatable<UsbHostController>
 [AddINotifyPropertyChangedInterface]
 internal class UsbHostControllerCollection : ObservableCollection<UsbHostController>
 {
-    public IEnumerable<UsbHub> GetAllHubDevicesFor()
+    public IEnumerable<UsbHub> AllHubDevices
     {
-        var devices = new List<UsbHub>();
+        get
+        {
+            var devices = new List<UsbHub>();
 
-        foreach (var hostController in this)
-        foreach (var hub in hostController.UsbHubs)
-            devices.AddRange(hub.GetAllHubDevices());
+            foreach (var hostController in this)
+            foreach (var hub in hostController.UsbHubs)
+                devices.AddRange(hub.AllHubDevices);
 
-        return devices.Distinct();
+            return devices.Distinct();
+        }
     }
 
-    public IEnumerable<UsbDevice> GetAllChildDevices()
+    public IEnumerable<UsbDevice> AllChildDevices
     {
-        var devices = new List<UsbDevice>();
+        get
+        {
+            var devices = new List<UsbDevice>();
 
-        foreach (var hostController in this)
-        foreach (var hub in hostController.UsbHubs)
-            devices.AddRange(hub.GetAllChildDevices());
+            foreach (var hostController in this)
+            foreach (var hub in hostController.UsbHubs)
+                devices.AddRange(hub.AllChildDevices);
 
-        return devices;
+            return devices;
+        }
     }
 }
 

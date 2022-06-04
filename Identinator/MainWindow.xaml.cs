@@ -205,7 +205,7 @@ public partial class MainWindow : MetroWindow
 
         foreach (var hostController in _viewModel.UsbHostControllers)
         foreach (var hub in hostController.UsbHubs)
-            devices.AddRange(hub.GetRewriteEnabledChildDevices());
+            devices.AddRange(hub.RewriteEnabledChildDevices);
 
         foreach (var usbDevice in devices) usbDevice.Device.ToUsbPnPDevice().CyclePort();
     }

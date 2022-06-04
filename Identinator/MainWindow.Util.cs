@@ -142,12 +142,12 @@ public partial class MainWindow
         }
         else
         {
-            var lhs = _viewModel.UsbHostControllers.GetAllChildDevices().Where(d => d.IsConnected).ToList();
-            var rhs = hostControllers.GetAllChildDevices().ToList();
+            var lhs = _viewModel.UsbHostControllers.AllChildDevices.Where(d => d.IsConnected).ToList();
+            var rhs = hostControllers.AllChildDevices.ToList();
 
             var added = rhs.Except(lhs).ToList();
 
-            var hubs = _viewModel.UsbHostControllers.GetAllHubDevicesFor().ToList();
+            var hubs = _viewModel.UsbHostControllers.AllHubDevices.ToList();
 
             foreach (var device in added.Where(d => d.HasCompositeParent || !d.IsConnected))
             {

@@ -204,20 +204,4 @@ public partial class MainWindow
 
         return devices;
     }
-
-    private static IEnumerable<UsbDevice> GetRewriteEnabledChildDevices(UsbDevice device)
-    {
-        var devices = new List<UsbDevice>();
-
-        if (!device.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
-
-        foreach (var childNode in device.ChildNodes.Where(d => d.RewriteSettings.Replace))
-        {
-            devices.Add(childNode);
-            var children = GetRewriteEnabledChildDevices(childNode);
-            devices.AddRange(children);
-        }
-
-        return devices;
-    }
 }

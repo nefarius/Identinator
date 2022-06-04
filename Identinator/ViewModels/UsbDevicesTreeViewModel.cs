@@ -173,6 +173,22 @@ internal class UsbDevice : IEquatable<UsbDevice>
         return devices;
     }
 
+    public IEnumerable<UsbDevice> GetRewriteEnabledChildDevices()
+    {
+        var devices = new List<UsbDevice>();
+
+        if (!this.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
+
+        foreach (var childNode in this.ChildNodes.Where(d => d.RewriteSettings.Replace))
+        {
+            devices.Add(childNode);
+            var children = childNode.GetRewriteEnabledChildDevices();
+            devices.AddRange(children);
+        }
+
+        return devices;
+    }
+
     /// <inheritdoc />
     public bool Equals(UsbDevice? other)
     {

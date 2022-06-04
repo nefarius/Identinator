@@ -143,8 +143,8 @@ public partial class MainWindow
         }
         else
         {
-            var lhs = GetAllChildDevicesFor(_viewModel.UsbHostControllers).Where(d => d.IsConnected).ToList();
-            var rhs = GetAllChildDevicesFor(hostControllers).ToList();
+            var lhs = _viewModel.UsbHostControllers.GetAllChildDevices().Where(d => d.IsConnected).ToList();
+            var rhs = hostControllers.GetAllChildDevices().ToList();
 
             var added = rhs.Except(lhs).ToList();
 
@@ -176,17 +176,6 @@ public partial class MainWindow
 
             CollectionViewSource.GetDefaultView(_viewModel.UsbHostControllers).Refresh();
         }
-    }
-
-    private static IEnumerable<UsbDevice> GetAllChildDevicesFor(UsbHostControllerCollection hostControllers)
-    {
-        var devices = new List<UsbDevice>();
-
-        foreach (var hostController in hostControllers)
-        foreach (var hub in hostController.UsbHubs)
-            devices.AddRange(hub.GetAllChildDevices());
-
-        return devices;
     }
 
     private static IEnumerable<UsbHub> GetAllHubDevicesFor(UsbHostControllerCollection hostControllers)

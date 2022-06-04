@@ -125,6 +125,9 @@ internal class UsbDevice : IEquatable<UsbDevice>
     /// </summary>
     public bool IsNewlyAttached { get; set; } = false;
 
+    /// <summary>
+    ///     True if device is online, false if phantom device.
+    /// </summary>
     public bool IsConnected { get; set; } = true;
 
     /// <summary>
@@ -157,6 +160,9 @@ internal class UsbDevice : IEquatable<UsbDevice>
     /// </summary>
     public PnPDevice Device { get; }
 
+    /// <summary>
+    ///     Gets all descending <see cref="UsbDevice"/>s.
+    /// </summary>
     public IEnumerable<UsbDevice> AllChildDevices
     {
         get
@@ -176,6 +182,9 @@ internal class UsbDevice : IEquatable<UsbDevice>
         }
     }
 
+    /// <summary>
+    ///     Gets all descending rewrite-enabled <see cref="UsbDevice"/>s.
+    /// </summary>
     public IEnumerable<UsbDevice> RewriteEnabledChildDevices
     {
         get
@@ -273,6 +282,9 @@ internal class UsbHub : UsbDevice, IEquatable<UsbHub>
         IsHub = true;
     }
 
+    /// <summary>
+    ///     Gets all descending <see cref="UsbHub"/>s.
+    /// </summary>
     public IEnumerable<UsbHub> AllHubDevices
     {
         get
@@ -379,6 +391,9 @@ internal class UsbHostController : IEquatable<UsbHostController>
 [AddINotifyPropertyChangedInterface]
 internal class UsbHostControllerCollection : ObservableCollection<UsbHostController>
 {
+    /// <summary>
+    ///     Gets all descending <see cref="UsbHub"/>s.
+    /// </summary>
     public IEnumerable<UsbHub> AllHubDevices
     {
         get
@@ -393,6 +408,9 @@ internal class UsbHostControllerCollection : ObservableCollection<UsbHostControl
         }
     }
 
+    /// <summary>
+    ///     Gets all descending <see cref="UsbDevice"/>s.
+    /// </summary>
     public IEnumerable<UsbDevice> AllChildDevices
     {
         get

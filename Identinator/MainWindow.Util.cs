@@ -184,24 +184,8 @@ public partial class MainWindow
 
         foreach (var hostController in hostControllers)
         foreach (var hub in hostController.UsbHubs)
-            devices.AddRange(GetAllHubDevices(hub));
+            devices.AddRange(hub.GetAllHubDevices());
 
         return devices.Distinct();
-    }
-
-    private static IEnumerable<UsbHub> GetAllHubDevices(UsbHub hub)
-    {
-        var devices = new List<UsbHub> { hub };
-
-        if (!hub.ChildNodes.Any()) return devices;
-
-        foreach (var childNode in hub.ChildNodes.OfType<UsbHub>())
-        {
-            devices.Add(childNode);
-            var children = GetAllHubDevices(childNode);
-            devices.AddRange(children);
-        }
-
-        return devices;
     }
 }

@@ -267,6 +267,22 @@ internal class UsbHub : UsbDevice, IEquatable<UsbHub>
         IsHub = true;
     }
 
+    public IEnumerable<UsbHub> GetAllHubDevices()
+    {
+        var devices = new List<UsbHub> { this };
+
+        if (!this.ChildNodes.Any()) return devices;
+
+        foreach (var childNode in this.ChildNodes.OfType<UsbHub>())
+        {
+            devices.Add(childNode);
+            var children = childNode.GetAllHubDevices();
+            devices.AddRange(children);
+        }
+
+        return devices;
+    }
+
     /// <inheritdoc />
     public bool Equals(UsbHub? other)
     {

@@ -30,6 +30,13 @@ internal class UsbDevice : IEquatable<UsbDevice>
     public UsbHub? ParentHub { get; }
 
     /// <summary>
+    ///     The device unique ID.
+    /// </summary>
+    public string DeviceId =>
+        Device.GetProperty<string[]>(FilterDriver.OriginalDeviceIdProperty)?.First() ??
+        Device.DeviceId;
+
+    /// <summary>
     ///     The Hardware IDs of this device.
     /// </summary>
     public List<string>? HardwareIds =>
@@ -207,7 +214,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
     /// <inheritdoc />
     public bool Equals(UsbDevice? other)
     {
-        return Equals(other?.Device, Device);
+        return Equals(other?.DeviceId, DeviceId);
     }
 
     /// <inheritdoc />

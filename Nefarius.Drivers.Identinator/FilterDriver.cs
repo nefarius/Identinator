@@ -49,7 +49,7 @@ public class FilterDriver
     /// </summary>
     public static DevicePropertyKey OriginalDeviceIdProperty => CustomDeviceProperty.CreateCustomDeviceProperty(
         Guid.Parse("{e98e7b19-6b9b-4d6e-aa39-01d9c270d09b}"), 4,
-        typeof(string));
+        typeof(string[] /* TODO: bug in driver, wrong type, fix with new driver version */));
 
     public bool IsDriverServiceKeyPresent => _serviceParameters is not null;
 

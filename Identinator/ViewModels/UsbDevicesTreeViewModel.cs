@@ -157,6 +157,22 @@ internal class UsbDevice : IEquatable<UsbDevice>
     /// </summary>
     public PnPDevice Device { get; }
 
+    public IEnumerable<UsbDevice> GetAllChildDevices()
+    {
+        var devices = new List<UsbDevice>();
+
+        if (!this.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
+
+        foreach (var childNode in this.ChildNodes)
+        {
+            devices.Add(childNode);
+            var children = childNode.GetAllChildDevices();
+            devices.AddRange(children);
+        }
+
+        return devices;
+    }
+
     /// <inheritdoc />
     public bool Equals(UsbDevice? other)
     {

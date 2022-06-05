@@ -33,7 +33,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
     ///     The device unique ID.
     /// </summary>
     public string DeviceId =>
-        Device.GetProperty<string[]>(FilterDriver.OriginalDeviceIdProperty)?.First() ??
+        Device.GetProperty<string>(FilterDriver.OriginalDeviceIdProperty) ??
         Device.DeviceId;
 
     /// <summary>
@@ -214,7 +214,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
     /// <inheritdoc />
     public bool Equals(UsbDevice? other)
     {
-        return Equals(other?.DeviceId, DeviceId);
+        return Equals(other?.DeviceId, DeviceId) && Equals(other?.PortNumber, PortNumber);
     }
 
     /// <inheritdoc />

@@ -18,7 +18,9 @@ using Nefarius.Drivers.Identinator;
 using Nefarius.Utilities.DeviceManagement.Drivers;
 using Nefarius.Utilities.DeviceManagement.Extensions;
 using Nefarius.Utilities.DeviceManagement.PnP;
+#if !DEBUG
 using Nefarius.Utilities.GitHubUpdater;
+#endif
 using Resourcer;
 
 namespace Identinator;

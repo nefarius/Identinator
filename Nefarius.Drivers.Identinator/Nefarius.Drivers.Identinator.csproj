@@ -4,6 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <Version>1.0.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Benjamin Höglinger-Stelzer</Authors>
+    <OutputPath>$(SolutionDir)bin\</OutputPath>
+    <Copyright>Copyright © Benjamin Höglinger-Stelzer 2022</Copyright>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Utility classes to interact with the registry configuration of the nssidswap.sys filter driver.</Description>
+    <RepositoryUrl>https://github.com/nefarius/Identinator</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/nefarius/Identinator</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

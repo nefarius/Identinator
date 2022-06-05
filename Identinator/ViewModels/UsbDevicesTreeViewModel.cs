@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Identinator.Annotations;
 using Nefarius.Drivers.Identinator;
 using Nefarius.Utilities.DeviceManagement.PnP;
 using PropertyChanged;
@@ -11,8 +14,7 @@ namespace Identinator.ViewModels;
 /// <summary>
 ///     Represents a USB device.
 /// </summary>
-[AddINotifyPropertyChangedInterface]
-internal class UsbDevice : IEquatable<UsbDevice>
+internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
 {
     public UsbDevice(UsbHub? parentHub, PnPDevice device)
     {
@@ -105,7 +107,8 @@ internal class UsbDevice : IEquatable<UsbDevice>
         get
         {
             var compositeDevice = PnPDevice
-                .GetDeviceByInstanceId(Device.GetProperty<string>(DevicePropertyDevice.Parent), DeviceLocationFlags.Phantom);
+                .GetDeviceByInstanceId(Device.GetProperty<string>(DevicePropertyDevice.Parent),
+                    DeviceLocationFlags.Phantom);
 
             // find root hub
             while (compositeDevice is not null)
@@ -168,7 +171,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
     public PnPDevice Device { get; }
 
     /// <summary>
-    ///     Gets all descending <see cref="UsbDevice"/>s.
+    ///     Gets all descending <see cref="UsbDevice" />s.
     /// </summary>
     public IEnumerable<UsbDevice> AllChildDevices
     {
@@ -176,9 +179,9 @@ internal class UsbDevice : IEquatable<UsbDevice>
         {
             var devices = new List<UsbDevice>();
 
-            if (!this.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
+            if (!ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
 
-            foreach (var childNode in this.ChildNodes)
+            foreach (var childNode in ChildNodes)
             {
                 devices.Add(childNode);
                 var children = childNode.AllChildDevices;
@@ -190,7 +193,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
     }
 
     /// <summary>
-    ///     Gets all descending rewrite-enabled <see cref="UsbDevice"/>s.
+    ///     Gets all descending rewrite-enabled <see cref="UsbDevice" />s.
     /// </summary>
     public IEnumerable<UsbDevice> RewriteEnabledChildDevices
     {
@@ -198,9 +201,9 @@ internal class UsbDevice : IEquatable<UsbDevice>
         {
             var devices = new List<UsbDevice>();
 
-            if (!this.ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
+            if (!ChildNodes.Any()) return Enumerable.Empty<UsbDevice>();
 
-            foreach (var childNode in this.ChildNodes.Where(d => d.RewriteSettings.Replace))
+            foreach (var childNode in ChildNodes.Where(d => d.RewriteSettings.Replace))
             {
                 devices.Add(childNode);
                 var children = childNode.RewriteEnabledChildDevices;
@@ -216,6 +219,8 @@ internal class UsbDevice : IEquatable<UsbDevice>
     {
         return Equals(other?.DeviceId, DeviceId) && Equals(other?.PortNumber, PortNumber);
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     /// <inheritdoc />
     public override bool Equals(object? obj)
@@ -240,7 +245,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
     /// </summary>
     /// <param name="parentHub">If non-null, the parent <see cref="UsbHub" />.</param>
     /// <param name="device">The <see cref="UsbDevice" /> to enumerate.</param>
-    private static void EnumerateChildren(UsbHub? parentHub, UsbDevice device)
+    private void EnumerateChildren(UsbHub? parentHub, UsbDevice device)
     {
         var childrenInstances = device.Device.GetProperty<string[]>(DevicePropertyDevice.Children);
 
@@ -259,6 +264,7 @@ internal class UsbDevice : IEquatable<UsbDevice>
                 var usbHub = new UsbHub(parentHub, childDevice);
                 EnumerateChildren(usbHub, usbHub);
                 device.ChildNodes.Add(usbHub);
+                OnPropertyChanged(nameof(ChildNodes));
             }
             else
             {
@@ -270,18 +276,36 @@ internal class UsbDevice : IEquatable<UsbDevice>
 
                 /* avoid duplicates */
                 if (!device.ChildNodes.Contains(usbDevice))
+                {
                     device.ChildNodes.Add(usbDevice);
+                    OnPropertyChanged(nameof(ChildNodes));
+                }
             }
         }
     }
+
+    [NotifyPropertyChangedInvocator]
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
 
-[AddINotifyPropertyChangedInterface]
 internal class UsbDeviceCollection : ObservableCollection<UsbDevice>
 {
+    protected override void InsertItem(int index, UsbDevice item)
+    {
+        base.InsertItem(index, item);
+        OnPropertyChanged(new PropertyChangedEventArgs(null));
+    }
+
+    protected override void RemoveItem(int index)
+    {
+        base.RemoveItem(index);
+        OnPropertyChanged(new PropertyChangedEventArgs(null));
+    }
 }
 
-[AddINotifyPropertyChangedInterface]
 internal class UsbHub : UsbDevice, IEquatable<UsbHub>
 {
     public UsbHub(UsbHub? parentHub, PnPDevice device) : base(parentHub, device)
@@ -290,7 +314,7 @@ internal class UsbHub : UsbDevice, IEquatable<UsbHub>
     }
 
     /// <summary>
-    ///     Gets all descending <see cref="UsbHub"/>s.
+    ///     Gets all descending <see cref="UsbHub" />s.
     /// </summary>
     public IEnumerable<UsbHub> AllHubDevices
     {
@@ -298,9 +322,9 @@ internal class UsbHub : UsbDevice, IEquatable<UsbHub>
         {
             var devices = new List<UsbHub> { this };
 
-            if (!this.ChildNodes.Any()) return devices;
+            if (!ChildNodes.Any()) return devices;
 
-            foreach (var childNode in this.ChildNodes.OfType<UsbHub>())
+            foreach (var childNode in ChildNodes.OfType<UsbHub>())
             {
                 devices.Add(childNode);
                 var children = childNode.AllHubDevices;
@@ -340,6 +364,17 @@ internal class UsbHub : UsbDevice, IEquatable<UsbHub>
 [AddINotifyPropertyChangedInterface]
 internal class UsbHubCollection : ObservableCollection<UsbHub>
 {
+    protected override void InsertItem(int index, UsbHub item)
+    {
+        base.InsertItem(index, item);
+        OnPropertyChanged(new PropertyChangedEventArgs(null));
+    }
+
+    protected override void RemoveItem(int index)
+    {
+        base.RemoveItem(index);
+        OnPropertyChanged(new PropertyChangedEventArgs(null));
+    }
 }
 
 [AddINotifyPropertyChangedInterface]
@@ -399,7 +434,7 @@ internal class UsbHostController : IEquatable<UsbHostController>
 internal class UsbHostControllerCollection : ObservableCollection<UsbHostController>
 {
     /// <summary>
-    ///     Gets all descending <see cref="UsbHub"/>s.
+    ///     Gets all descending <see cref="UsbHub" />s.
     /// </summary>
     public IEnumerable<UsbHub> AllHubDevices
     {
@@ -416,7 +451,7 @@ internal class UsbHostControllerCollection : ObservableCollection<UsbHostControl
     }
 
     /// <summary>
-    ///     Gets all descending <see cref="UsbDevice"/>s.
+    ///     Gets all descending <see cref="UsbDevice" />s.
     /// </summary>
     public IEnumerable<UsbDevice> AllChildDevices
     {
@@ -431,14 +466,33 @@ internal class UsbHostControllerCollection : ObservableCollection<UsbHostControl
             return devices;
         }
     }
+
+    protected override void InsertItem(int index, UsbHostController item)
+    {
+        base.InsertItem(index, item);
+        OnPropertyChanged(new PropertyChangedEventArgs(null));
+    }
+
+    protected override void RemoveItem(int index)
+    {
+        base.RemoveItem(index);
+        OnPropertyChanged(new PropertyChangedEventArgs(null));
+    }
 }
 
-[AddINotifyPropertyChangedInterface]
-internal class UsbDevicesTreeViewModel
+internal class UsbDevicesTreeViewModel : INotifyPropertyChanged
 {
     public UsbHostControllerCollection UsbHostControllers { get; set; } = new();
 
     public UsbDevice? SelectedDevice { get; set; }
 
     public FilterDriverViewModel FilterDriver { get; set; } = new();
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    [NotifyPropertyChangedInvocator]
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

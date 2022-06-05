@@ -108,82 +108,83 @@ public partial class MainWindow
 
     private void EnumerateAllDevices()
     {
-        var instance = 0;
-
-        var hostControllers = new UsbHostControllerCollection();
-
-        while (Devcon.FindByInterfaceGuid(DeviceInterfaceIds.UsbHostController, out var device, instance++))
+        lock (_refreshLock)
         {
-            var hostController = new UsbHostController(device);
+            var instance = 0;
 
-            /* TODO: UDE devices seem to get enumerated twice for some reason?! So skip one... */
-            if (hostControllers.Contains(hostController))
-                continue;
+            var hostControllers = new UsbHostControllerCollection();
 
-            var hostControllerChildren = device.GetProperty<string[]>(DevicePropertyDevice.Children);
+            while (Devcon.FindByInterfaceGuid(DeviceInterfaceIds.UsbHostController, out var device, instance++))
+            {
+                var hostController = new UsbHostController(device);
 
-            if (hostControllerChildren is not null)
-                foreach (var hubInstanceId in hostControllerChildren)
+                /* TODO: UDE devices seem to get enumerated twice for some reason?! So skip one... */
+                if (hostControllers.Contains(hostController))
+                    continue;
+
+                var hostControllerChildren = device.GetProperty<string[]>(DevicePropertyDevice.Children);
+
+                if (hostControllerChildren is not null)
+                    foreach (var hubInstanceId in hostControllerChildren)
+                    {
+                        var hubDevice = PnPDevice.GetDeviceByInstanceId(hubInstanceId);
+                        var hub = new UsbHub(null, hubDevice);
+
+                        hostController.UsbHubs.Add(hub);
+                    }
+
+                hostControllers.Add(hostController);
+            }
+
+            if (!_viewModel.UsbHostControllers.Any())
+            {
+                _viewModel.UsbHostControllers = hostControllers;
+                MainGrid.DataContext = _viewModel;
+                FilterDriverGrid.DataContext = _viewModel.FilterDriver;
+            }
+            else
+            {
+                var lhs = _viewModel.UsbHostControllers.AllChildDevices.Where(d => d.IsConnected).ToList();
+                var rhs = hostControllers.AllChildDevices.ToList();
+
+                var added = rhs.Except(lhs).ToList();
+
+                var hubs = _viewModel.UsbHostControllers.AllHubDevices.ToList();
+
+                foreach (var device in added.Where(d => d.HasCompositeParent || !d.IsConnected))
                 {
-                    var hubDevice = PnPDevice.GetDeviceByInstanceId(hubInstanceId);
-                    var hub = new UsbHub(null, hubDevice);
-
-                    hostController.UsbHubs.Add(hub);
+                    device.IsNewlyAttached = true;
+                    device.IsConnected = true;
                 }
 
-            hostControllers.Add(hostController);
-        }
+                foreach (var device in added.Where(d => !d.HasCompositeParent))
+                {
+                    var nodes = hubs.First(h => Equals(h, device.ParentHub)).ChildNodes;
 
-        if (!_viewModel.UsbHostControllers.Any())
-        {
-            _viewModel.UsbHostControllers = hostControllers;
-            MainGrid.DataContext = _viewModel;
-            FilterDriverGrid.DataContext = _viewModel.FilterDriver;
-        }
-        else
-        {
-            var lhs = _viewModel.UsbHostControllers.AllChildDevices.Where(d => d.IsConnected).ToList();
-            var rhs = hostControllers.AllChildDevices.ToList();
+                    if (nodes.Contains(device))
+                        nodes.Remove(device);
 
-            var added = rhs.Except(lhs).ToList();
+                    nodes.Add(device);
+                }
 
-            var hubs = _viewModel.UsbHostControllers.AllHubDevices.ToList();
+                var removed = lhs.Except(rhs).ToList();
 
-            foreach (var device in added.Where(d => d.HasCompositeParent || !d.IsConnected))
-            {
-                device.IsNewlyAttached = true;
-                device.IsConnected = true;
-            }
-
-            foreach (var device in added.Where(d => !d.HasCompositeParent))
-            {
-                var nodes = hubs.First(h => Equals(h, device.ParentHub)).ChildNodes;
-
-                if (nodes.Contains(device))
-                    nodes.Remove(device);
-
-                nodes.Add(device);
-            }
-
-            var removed = lhs.Except(rhs).ToList();
-
-            foreach (var device in removed)
-            {
-                device.IsNewlyAttached = false;
-                device.IsConnected = false;
-            }
-
-            CollectionViewSource.GetDefaultView(_viewModel.UsbHostControllers).Refresh();
-
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(250);
-
-                foreach (var device in added)
+                foreach (var device in removed)
                 {
                     device.IsNewlyAttached = false;
+                    device.IsConnected = false;
                 }
-            });
+
+                _ = Task.Run(async () =>
+                {
+                    await Task.Delay(250);
+
+                    foreach (var device in added)
+                    {
+                        device.IsNewlyAttached = false;
+                    }
+                });
+            }
         }
     }
 }

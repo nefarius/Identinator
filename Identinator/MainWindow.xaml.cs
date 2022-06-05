@@ -43,6 +43,8 @@ public partial class MainWindow : MetroWindow
     private readonly DeviceNotificationListener _deviceListener = new();
     private readonly UsbDevicesTreeViewModel _viewModel = new();
 
+    private readonly object _refreshLock = new();
+
     public MainWindow()
     {
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;

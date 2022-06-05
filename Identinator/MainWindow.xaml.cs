@@ -78,6 +78,19 @@ public partial class MainWindow : MetroWindow
             return;
         }
 
+        // Architecture check
+        if (!Environment.Is64BitProcess)
+        {
+            await this.ShowMessageAsync("Unsupported architecture",
+                @"This product is only supported on Intel/AMD x64 (64-Bit) CPU architectures. " +
+                Environment.NewLine + Environment.NewLine +
+                @"The tool will close now."
+            );
+            e.Handled = true;
+            Application.Current.Shutdown(0);
+            return;
+        }
+
         // Display Server warning to user
         if (OS.IsWindowsServer())
             await this.ShowMessageAsync("⚠️ Server OS detected ⚠️",

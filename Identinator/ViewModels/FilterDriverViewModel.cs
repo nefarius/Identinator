@@ -51,6 +51,9 @@ internal class FilterDriverViewModel : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    ///     True if the driver has been detected, false otherwise.
+    /// </summary>
     public bool IsDriverInstalled => !string.IsNullOrEmpty(GetLocalDriverVersion());
 
     private static string? GetLocalDriverVersion()

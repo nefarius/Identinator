@@ -174,14 +174,24 @@ public partial class MainWindow : MetroWindow
 
     private async void InstallDriver_OnClick(object sender, RoutedEventArgs e)
     {
-        var button = sender as Button;
+        var button = (Button)sender;
         button.IsEnabled = false;
+
+        _deviceListener.StopListen(FilterDriver.FilteredDeviceInterfaceId);
 
         await InstallDriver();
 
         button.IsEnabled = true;
 
         _viewModel.FilterDriver.Refresh();
+
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(250);
+            Dispatcher.Invoke(EnumerateAllDevices);
+        });
+
+        _deviceListener.StartListen(FilterDriver.FilteredDeviceInterfaceId);
     }
 
     private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -191,7 +201,7 @@ public partial class MainWindow : MetroWindow
 
     private async void UninstallDriver_OnClick(object sender, RoutedEventArgs e)
     {
-        var button = sender as Button;
+        var button = (Button)sender;
         button.IsEnabled = false;
 
         var controller = await this.ShowProgressAsync("Removal in progress", "Removing driver packages");

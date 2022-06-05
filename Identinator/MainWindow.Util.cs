@@ -159,12 +159,10 @@ public partial class MainWindow
 
                 foreach (var device in added.Where(d => !d.HasCompositeParent))
                 {
-                    var nodes = hubs.First(h => Equals(h, device.ParentHub)).ChildNodes;
-
-                    if (nodes.Contains(device))
-                        nodes.Remove(device);
-
-                    nodes.Add(device);
+                    var parentHub = hubs.First(h => Equals(h, device.ParentHub));
+                    
+                    parentHub.RemoveChildDevice(device);
+                    parentHub.AddChildDevice(device);
                 }
 
                 var removed = lhs.Except(rhs).ToList();

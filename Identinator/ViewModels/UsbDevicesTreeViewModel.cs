@@ -16,10 +16,15 @@ namespace Identinator.ViewModels;
 /// </summary>
 internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
 {
+    private readonly ObservableCollection<UsbDevice> _childNodes;
+
     public UsbDevice(UsbHub? parentHub, PnPDevice device)
     {
         Device = device;
         ParentHub = parentHub;
+
+        _childNodes = new ObservableCollection<UsbDevice>();
+        ChildNodes = new ReadOnlyCollection<UsbDevice>(_childNodes);
 
         EnumerateChildren(parentHub, this);
 
@@ -143,7 +148,7 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
     /// <summary>
     ///     List of children to this device, if any.
     /// </summary>
-    public UsbDeviceCollection ChildNodes { get; set; } = new();
+    public IReadOnlyCollection<UsbDevice> ChildNodes { get; }
 
     /// <summary>
     ///     The friendly name or description of the device.
@@ -222,6 +227,17 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    public void AddChildDevice(UsbDevice device)
+    {
+        _childNodes.Add(device);
+    }
+
+    public void RemoveChildDevice(UsbDevice device)
+    {
+        if (_childNodes.Contains(device))
+            _childNodes.Remove(device);
+    }
+
     /// <inheritdoc />
     public override bool Equals(object? obj)
     {
@@ -263,7 +279,7 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
             {
                 var usbHub = new UsbHub(parentHub, childDevice);
                 EnumerateChildren(usbHub, usbHub);
-                device.ChildNodes.Add(usbHub);
+                device._childNodes.Add(usbHub);
                 OnPropertyChanged(nameof(ChildNodes));
             }
             else
@@ -277,7 +293,7 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
                 /* avoid duplicates */
                 if (!device.ChildNodes.Contains(usbDevice))
                 {
-                    device.ChildNodes.Add(usbDevice);
+                    device._childNodes.Add(usbDevice);
                     OnPropertyChanged(nameof(ChildNodes));
                 }
             }
@@ -288,21 +304,6 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-}
-
-internal class UsbDeviceCollection : ObservableCollection<UsbDevice>
-{
-    protected override void InsertItem(int index, UsbDevice item)
-    {
-        base.InsertItem(index, item);
-        OnPropertyChanged(new PropertyChangedEventArgs(null));
-    }
-
-    protected override void RemoveItem(int index)
-    {
-        base.RemoveItem(index);
-        OnPropertyChanged(new PropertyChangedEventArgs(null));
     }
 }
 

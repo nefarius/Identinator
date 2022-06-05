@@ -174,6 +174,16 @@ public partial class MainWindow
             }
 
             CollectionViewSource.GetDefaultView(_viewModel.UsbHostControllers).Refresh();
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(250);
+
+                foreach (var device in added)
+                {
+                    device.IsNewlyAttached = false;
+                }
+            });
         }
     }
 }

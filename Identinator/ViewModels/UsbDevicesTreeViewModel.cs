@@ -230,12 +230,15 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
     public void AddChildDevice(UsbDevice device)
     {
         _childNodes.Add(device);
+        OnPropertyChanged(nameof(ChildNodes));
     }
 
     public void RemoveChildDevice(UsbDevice device)
     {
-        if (_childNodes.Contains(device))
-            _childNodes.Remove(device);
+        if (!_childNodes.Contains(device)) return;
+
+        _childNodes.Remove(device);
+        OnPropertyChanged(nameof(ChildNodes));
     }
 
     /// <inheritdoc />

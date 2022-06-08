@@ -173,6 +173,7 @@ public partial class MainWindow
                     device.IsConnected = false;
                 }
 
+                /*
                 _ = Task.Run(async () =>
                 {
                     await Task.Delay(250);
@@ -182,7 +183,10 @@ public partial class MainWindow
                         device.IsNewlyAttached = false;
                     }
                 });
+                */
             }
         }
     }
+
+    
 }

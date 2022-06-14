@@ -13,6 +13,9 @@ public class FilterDriver
 {
     private readonly RegistryKey? _serviceParameters;
 
+    /// <summary>
+    ///     Creates a new instance of <see cref="FilterDriver"/>.
+    /// </summary>
     public FilterDriver()
     {
         _serviceParameters =

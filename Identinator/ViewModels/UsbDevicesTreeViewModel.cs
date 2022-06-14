@@ -95,7 +95,7 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
             var origIds = Device.GetProperty<string[]>(FilterDriver.OriginalHardwareIdsProperty);
             var curIds = Device.GetProperty<string[]>(DevicePropertyDevice.HardwareIds);
 
-            return !origIds.SequenceEqual(curIds);
+            return !origIds?.SequenceEqual(curIds) ?? false;
         }
     }
 
@@ -125,7 +125,9 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
 
                 var service = compositeDevice.GetProperty<string>(DevicePropertyDevice.Service);
 
-                if (service is not null && service.Equals("usbccgp", StringComparison.OrdinalIgnoreCase))
+                if (service is not null && 
+                    (service.Equals("usbccgp", StringComparison.OrdinalIgnoreCase) ||
+                     service.StartsWith("xusb", StringComparison.OrdinalIgnoreCase)))
                     return true;
 
                 compositeDevice = PnPDevice.GetDeviceByInstanceId(parentId);

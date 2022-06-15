@@ -144,6 +144,12 @@ public partial class MainWindow
             }
             else
             {
+                if (_viewModel.Refresh == RefreshMechanism.Full)
+                {
+                    _viewModel.UsbHostControllers = hostControllers;
+                    return;
+                }
+
                 var lhs = _viewModel.UsbHostControllers.AllChildDevices.Where(d => d.IsConnected).ToList();
                 var rhs = hostControllers.AllChildDevices.ToList();
 
@@ -172,18 +178,6 @@ public partial class MainWindow
                     device.IsNewlyAttached = false;
                     device.IsConnected = false;
                 }
-
-                /*
-                _ = Task.Run(async () =>
-                {
-                    await Task.Delay(250);
-
-                    foreach (var device in added)
-                    {
-                        device.IsNewlyAttached = false;
-                    }
-                });
-                */
             }
         }
     }

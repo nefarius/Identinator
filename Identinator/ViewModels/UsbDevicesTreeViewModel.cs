@@ -486,6 +486,12 @@ internal class UsbHostControllerCollection : ObservableCollection<UsbHostControl
     }
 }
 
+internal enum RefreshMechanism
+{
+    Full,
+    Smart
+}
+
 internal class UsbDevicesTreeViewModel : INotifyPropertyChanged
 {
     public UsbHostControllerCollection UsbHostControllers { get; set; } = new();
@@ -493,6 +499,8 @@ internal class UsbDevicesTreeViewModel : INotifyPropertyChanged
     public UsbDevice? SelectedDevice { get; set; }
 
     public FilterDriverViewModel FilterDriver { get; set; } = new();
+
+    public RefreshMechanism Refresh { get; set; } = RefreshMechanism.Full;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -63,7 +63,35 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Left panel -->
-                <GroupBox Header="USB Devices" Margin="10">
+                <GroupBox Margin="10">
+                    <GroupBox.Resources>
+                        <converters:RefreshMechanismConverter x:Key="RefreshMechanismConverter"/>
+                    </GroupBox.Resources>
+                    <GroupBox.Header>
+                        <Grid Height="30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
+                                USB Devices
+                            </TextBlock>
+                            <Border Grid.Column="2" BorderThickness="1" CornerRadius="12" BorderBrush="#303030" Background="#303030">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton GroupName="RefreshMechanism" VerticalAlignment="Center" Margin="10,0,5,0"
+                                             IsChecked="{Binding Path=Refresh, Converter={StaticResource RefreshMechanismConverter}, ConverterParameter=Full}">
+                                        Full refresh
+                                    </RadioButton>
+                                    <RadioButton GroupName="RefreshMechanism" VerticalAlignment="Center" Margin="5,0,10,0"
+                                         IsChecked="{Binding Path=Refresh, Converter={StaticResource RefreshMechanismConverter}, ConverterParameter=Smart}">
+                                        Smart refresh
+                                    </RadioButton>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </GroupBox.Header>
                     <TreeView
                         ItemsSource="{Binding Path=UsbHostControllers}"
                         SelectedItemChanged="TreeView_OnSelectedItemChanged">
@@ -218,7 +246,14 @@
                     </Grid.RowDefinitions>
 
                     <!-- Global settings -->
-                    <GroupBox Grid.Row="0" Header="Global settings" Margin="10">
+                    <GroupBox Grid.Row="0" Margin="10">
+                        <GroupBox.Header>
+                            <Grid Height="30">
+                                <TextBlock VerticalAlignment="Center">
+                                    Global settings
+                                </TextBlock>
+                            </Grid>
+                        </GroupBox.Header>
                         <StackPanel Margin="5">
                             <DockPanel LastChildFill="False">
                                 <mah:ToggleSwitch IsOn="{Binding FilterDriver.IsEnabled, Mode=TwoWay}">

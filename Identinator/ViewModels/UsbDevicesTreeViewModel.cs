@@ -125,9 +125,15 @@ internal class UsbDevice : IEquatable<UsbDevice>, INotifyPropertyChanged
 
                 var service = compositeDevice.GetProperty<string>(DevicePropertyDevice.Service);
 
-                if (service is not null && 
-                    (service.Equals("usbccgp", StringComparison.OrdinalIgnoreCase) ||
-                     service.StartsWith("xusb", StringComparison.OrdinalIgnoreCase)))
+                // TODO: improve this method of detection
+                if (
+                    service is not null &&
+                    (
+                        service.Equals("usbccgp", StringComparison.OrdinalIgnoreCase) ||
+                        service.StartsWith("xusb", StringComparison.OrdinalIgnoreCase) ||
+                        service.StartsWith("dc1-controller", StringComparison.OrdinalIgnoreCase)
+                    )
+                )
                     return true;
 
                 compositeDevice = PnPDevice.GetDeviceByInstanceId(parentId);

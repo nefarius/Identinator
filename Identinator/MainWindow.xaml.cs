@@ -134,6 +134,7 @@ public partial class MainWindow : MetroWindow
         _deviceListener.DeviceRemoved += DeviceListenerOnDeviceChanged;
 
         _deviceListener.StartListen(FilterDriver.FilteredDeviceInterfaceId);
+        _deviceListener.StartListen(DeviceInterfaceIds.HidDevice);
 
         EnumerateAllDevices();
     }

@@ -65,28 +65,92 @@
                 <!-- Left panel -->
                 <GroupBox Margin="10">
                     <GroupBox.Resources>
-                        <converters:RefreshMechanismConverter x:Key="RefreshMechanismConverter"/>
+                        <converters:RefreshMechanismConverter x:Key="RefreshMechanismConverter" />
                     </GroupBox.Resources>
                     <GroupBox.Header>
                         <Grid Height="30">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
                                 USB Devices
                             </TextBlock>
-                            <Border Grid.Column="2" BorderThickness="1" CornerRadius="12" BorderBrush="#303030" Background="#303030">
+                            <Border Grid.Column="2" BorderThickness="1" CornerRadius="12" BorderBrush="#303030"
+                                    Background="#303030">
                                 <StackPanel Orientation="Horizontal">
-                                    <RadioButton GroupName="RefreshMechanism" VerticalAlignment="Center" Margin="10,0,5,0"
-                                             IsChecked="{Binding Path=Refresh, Converter={StaticResource RefreshMechanismConverter}, ConverterParameter=Full}">
+                                    <RadioButton GroupName="RefreshMechanism" VerticalAlignment="Center"
+                                                 Margin="10,0,5,0"
+                                                 ToolTipService.IsEnabled="True"
+                                                 IsChecked="{Binding Path=Refresh, Converter={StaticResource RefreshMechanismConverter}, ConverterParameter=Full}">
                                         Full refresh
+                                        <RadioButton.ToolTip>
+                                            <ToolTip controlzex:ToolTipAssist.AutoMove="True">
+                                                <ToolTip.Template>
+                                                    <ControlTemplate>
+                                                        <Grid>
+                                                            <Border Background="Gray"
+                                                                    BorderBrush="Black"
+                                                                    BorderThickness="1"
+                                                                    Opacity="0.9"
+                                                                    SnapsToDevicePixels="True" />
+                                                            <StackPanel Margin="10">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock
+                                                                        Foreground="WhiteSmoke"
+                                                                        FontSize="16"
+                                                                        FontWeight="Bold"
+                                                                        Text="Rebuilds the entire list of devices upon device arrival or removal."
+                                                                        TextOptions.TextFormattingMode="Display"
+                                                                        TextOptions.TextRenderingMode="ClearType" />
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </ControlTemplate>
+                                                </ToolTip.Template>
+                                            </ToolTip>
+                                        </RadioButton.ToolTip>
                                     </RadioButton>
-                                    <RadioButton GroupName="RefreshMechanism" VerticalAlignment="Center" Margin="5,0,10,0"
-                                         IsChecked="{Binding Path=Refresh, Converter={StaticResource RefreshMechanismConverter}, ConverterParameter=Smart}">
+                                    <RadioButton GroupName="RefreshMechanism" VerticalAlignment="Center"
+                                                 Margin="5,0,10,0"
+                                                 ToolTipService.IsEnabled="True"
+                                                 IsChecked="{Binding Path=Refresh, Converter={StaticResource RefreshMechanismConverter}, ConverterParameter=Smart}">
                                         Smart refresh
+                                        <RadioButton.ToolTip>
+                                            <ToolTip controlzex:ToolTipAssist.AutoMove="True">
+                                                <ToolTip.Template>
+                                                    <ControlTemplate>
+                                                        <Grid>
+                                                            <Border Background="Gray"
+                                                                    BorderBrush="Black"
+                                                                    BorderThickness="1"
+                                                                    Opacity="0.9"
+                                                                    SnapsToDevicePixels="True" />
+                                                            <StackPanel Margin="10">
+                                                                <StackPanel>
+                                                                    <TextBlock
+                                                                        Foreground="WhiteSmoke"
+                                                                        FontSize="16"
+                                                                        FontWeight="Bold"
+                                                                        Text="Modifies only the relevant sections upon device arrival or removal."
+                                                                        TextOptions.TextFormattingMode="Display"
+                                                                        TextOptions.TextRenderingMode="ClearType" />
+                                                                    <TextBlock
+                                                                        Foreground="WhiteSmoke"
+                                                                        FontSize="16"
+                                                                        FontWeight="Bold"
+                                                                        Text="This feature is experimental and may not work as desired."
+                                                                        TextOptions.TextFormattingMode="Display"
+                                                                        TextOptions.TextRenderingMode="ClearType" />
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </ControlTemplate>
+                                                </ToolTip.Template>
+                                            </ToolTip>
+                                        </RadioButton.ToolTip>
                                     </RadioButton>
                                 </StackPanel>
                             </Border>
@@ -97,7 +161,7 @@
                         SelectedItemChanged="TreeView_OnSelectedItemChanged">
                         <TreeView.Resources>
                             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                            <converters:UsbDeviceConverter x:Key="UsbDeviceConverter"/>
+                            <converters:UsbDeviceConverter x:Key="UsbDeviceConverter" />
 
                             <!-- USB Host Controllers -->
                             <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHostController}"
@@ -120,11 +184,12 @@
                             <!-- Nested USB Hubs-->
                             <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbHub}">
                                 <HierarchicalDataTemplate.ItemsSource>
-                                    <Binding Path="ChildNodes" Converter="{StaticResource UsbDeviceConverter}"/>
+                                    <Binding Path="ChildNodes" Converter="{StaticResource UsbDeviceConverter}" />
                                 </HierarchicalDataTemplate.ItemsSource>
                                 <HierarchicalDataTemplate.ItemContainerStyle>
-                                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                                        <Setter Property="IsEnabled" Value="{Binding IsConnected}"/>
+                                    <Style TargetType="{x:Type TreeViewItem}"
+                                           BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                        <Setter Property="IsEnabled" Value="{Binding IsConnected}" />
                                         <Setter Property="IsExpanded" Value="True" />
                                     </Style>
                                 </HierarchicalDataTemplate.ItemContainerStyle>
@@ -138,20 +203,27 @@
                             <!-- USB Devices -->
                             <HierarchicalDataTemplate DataType="{x:Type viewModels:UsbDevice}">
                                 <HierarchicalDataTemplate.ItemsSource>
-                                    <Binding Path="ChildNodes" Converter="{StaticResource UsbDeviceConverter}"/>
+                                    <Binding Path="ChildNodes" Converter="{StaticResource UsbDeviceConverter}" />
                                 </HierarchicalDataTemplate.ItemsSource>
                                 <HierarchicalDataTemplate.ItemContainerStyle>
-                                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                                        <Setter Property="IsEnabled" Value="{Binding IsConnected}"/>
+                                    <Style TargetType="{x:Type TreeViewItem}"
+                                           BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                        <Setter Property="IsEnabled" Value="{Binding IsConnected}" />
                                         <Style.Resources>
-                                            <Storyboard x:Key="Storyboard" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)" AutoReverse="True">
-                                                <ColorAnimation From="Transparent" To="ForestGreen" Duration="0:0:1" RepeatBehavior="4x"/>
+                                            <Storyboard x:Key="Storyboard"
+                                                        Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                        AutoReverse="True">
+                                                <ColorAnimation From="Transparent" To="ForestGreen" Duration="0:0:1"
+                                                                RepeatBehavior="4x" />
                                             </Storyboard>
                                         </Style.Resources>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsNewlyAttached, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <DataTrigger
+                                                Binding="{Binding IsNewlyAttached, UpdateSourceTrigger=PropertyChanged}"
+                                                Value="True">
                                                 <DataTrigger.EnterActions>
-                                                    <BeginStoryboard Name="flash" Storyboard="{StaticResource Storyboard}"/>
+                                                    <BeginStoryboard Name="flash"
+                                                                     Storyboard="{StaticResource Storyboard}" />
                                                 </DataTrigger.EnterActions>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -159,16 +231,16 @@
                                 </HierarchicalDataTemplate.ItemContainerStyle>
 
                                 <DockPanel LastChildFill="False" ToolTipService.IsEnabled="True">
-                                    <materialDesign:PackIcon 
+                                    <materialDesign:PackIcon
                                         Margin="15,0,5,0"
                                         VerticalAlignment="Center"
                                         Width="10" Height="10"
-                                        Kind="Circle" 
-                                        Visibility="{Binding Converter={StaticResource BooleanToVisibilityConverter}, Path=IsLowestUsbChild}"/>
-                                    <materialDesign:PackIcon 
+                                        Kind="Circle"
+                                        Visibility="{Binding Converter={StaticResource BooleanToVisibilityConverter}, Path=IsLowestUsbChild}" />
+                                    <materialDesign:PackIcon
                                         Margin="0,0,5,0"
-                                        Kind="UsbPort" 
-                                        Foreground="MediumPurple"/>
+                                        Kind="UsbPort"
+                                        Foreground="MediumPurple" />
                                     <TextBlock Text="{Binding Name}" />
                                     <TextBlock Text=" [Port " />
                                     <TextBlock Text="{Binding PortNumber}" />
@@ -397,7 +469,7 @@
                                                 Text="{Binding RewriteSettings.ProductId, Converter={StaticResource HexStringConverter}}" />
 
                                             <mah:ToggleSwitch Margin="10"
-                                                      IsOn="{Binding RewriteSettings.OverrideCompatibleIds, Mode=TwoWay}">
+                                                              IsOn="{Binding RewriteSettings.OverrideCompatibleIds, Mode=TwoWay}">
                                                 Override Compatible IDs to WinUSB-compatible Vendor Device
                                             </mah:ToggleSwitch>
                                         </StackPanel>
@@ -426,18 +498,18 @@
                 </Grid.DataContext>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
                 <!-- Filter Driver Installer -->
-                <GroupBox Grid.Row="0" Grid.Column="0" 
-                          Header="Filter Driver Installer" 
+                <GroupBox Grid.Row="0" Grid.Column="0"
+                          Header="Filter Driver Installer"
                           Margin="20">
                     <StackPanel>
                         <TextBox
@@ -448,13 +520,13 @@
                             Text="{Binding CurrentDriverVersion, Mode=OneWay}" />
 
                         <DockPanel LastChildFill="False">
-                            <Button 
+                            <Button
                                 Margin="10"
                                 Click="InstallDriver_OnClick">
                                 (Re-)Install latest Driver
                             </Button>
 
-                            <Button 
+                            <Button
                                 IsEnabled="{Binding IsDriverInstalled}"
                                 Margin="10"
                                 Click="UninstallDriver_OnClick">
@@ -488,8 +560,8 @@
     <Style TargetType="FlowDocument" BasedOn="{x:Static mdXaml:MarkdownStyle.Standard}">
         <Style.Resources>
             <Style TargetType="Paragraph">
-                <Setter Property="Margin" Value="4, 2, 20, 6"/>
-                <Setter Property="TextAlignment" Value="Justify"></Setter>
+                <Setter Property="Margin" Value="4, 2, 20, 6" />
+                <Setter Property="TextAlignment" Value="Justify" />
                 <Style.Triggers>
                     <Trigger Property="Tag" Value="Heading2">
                         <Setter Property="Foreground" Value="LightGray" />

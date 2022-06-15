@@ -27,9 +27,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-    <!--<PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="2.6.102" />-->
+    <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="2.8.107" />
   </ItemGroup>
 
+  <!--
   <ItemGroup>
     <PackageReference Include="PInvoke.Kernel32" Version="0.7.104" />
     <PackageReference Include="PInvoke.User32" Version="0.7.104" />
@@ -37,5 +38,6 @@
       <HintPath>..\..\..\GitHub\Nefarius.Utilities.DeviceManagement\bin\netstandard2.0\Nefarius.Utilities.DeviceManagement.dll</HintPath>
     </Reference>
   </ItemGroup>
+  -->
 
 </Project>

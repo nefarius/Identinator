@@ -50,7 +50,7 @@
     <PackageReference Include="MahApps.Metro.SimpleChildWindow" Version="2.0.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
     <PackageReference Include="MdXaml" Version="1.15.0" />
-    <!--<PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="2.7.104" />-->
+    <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="2.8.107" />
     <PackageReference Include="Nefarius.Utilities.GitHubUpdater" Version="1.0.4" />
     <PackageReference Include="PortableJsonSettingsProvider" Version="0.2.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" PrivateAssets="All" />
@@ -65,6 +65,7 @@
     <ProjectReference Include="$(SolutionDir)\Nefarius.Drivers.Identinator\Nefarius.Drivers.Identinator.csproj" />
   </ItemGroup>
 
+  <!--
   <ItemGroup>
     <PackageReference Include="PInvoke.Kernel32" Version="0.7.104" />
     <PackageReference Include="PInvoke.User32" Version="0.7.104" />
@@ -72,6 +73,7 @@
       <HintPath>..\..\..\GitHub\Nefarius.Utilities.DeviceManagement\bin\netstandard2.0\Nefarius.Utilities.DeviceManagement.dll</HintPath>
     </Reference>
   </ItemGroup>
+  -->
 
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

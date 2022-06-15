@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="$(SolutionDir)\assets\NSS-128x128.png">
+    <None Include="$(ProjectDir)\..\assets\NSS-128x128.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

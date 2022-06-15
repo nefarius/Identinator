@@ -1,0 +1,30 @@
+version: 1.0.{build}
+image: Visual Studio 2022
+configuration:
+- Release
+install:
+- cmd: git submodule -q update --init
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+before_build:
+- nuget restore
+skip_commits:
+  files:
+    - assets/*
+    - '**/*.md'
+build_script:
+- cmd: dotnet build .\Nefarius.Drivers.Identinator\Nefarius.Drivers.Identinator.csproj
+artifacts:
+- path: '.\Nefarius.Drivers.Identinator\bin\*.nupkg'
+deploy:
+- provider: Environment
+  name: nuget.org
+  on:
+    branch: master
+    appveyor_repo_tag: true

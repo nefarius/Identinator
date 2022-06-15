@@ -2,6 +2,8 @@
 
 # Nefarius' Identinator
 
+[![Build status](https://ci.appveyor.com/api/projects/status/6mpsnmo569anfhoa?svg=true)](https://ci.appveyor.com/project/nefarius/identinator) ![Requirements](https://img.shields.io/badge/Requires-.NET%206.0-blue.svg) [![Nuget](https://img.shields.io/nuget/v/Nefarius.Drivers.Identinator)](https://www.nuget.org/packages/Nefarius.Drivers.Identinator/) [![Nuget](https://img.shields.io/nuget/dt/Nefarius.Drivers.Identinator)](https://www.nuget.org/packages/Nefarius.Drivers.Identinator/)
+
 ⚠️ **UNFORGIVING SOFTWARE AHEAD, USE WITH EXTRA CARE** ⚠️
 
 ## Documentation: [vigem.org/projects/Identinator/](https://vigem.org/projects/Identinator/)

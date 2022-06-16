@@ -18,6 +18,11 @@
     <PackageProjectUrl>https://github.com/nefarius/Identinator</PackageProjectUrl>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="$(ProjectDir)\..\assets\NSS-128x128.png">
       <Pack>True</Pack>

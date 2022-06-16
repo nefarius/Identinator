@@ -14,8 +14,10 @@
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+    <!--
     <PublishSingleFile>true</PublishSingleFile>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    -->
     <DebugType>None</DebugType>
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>

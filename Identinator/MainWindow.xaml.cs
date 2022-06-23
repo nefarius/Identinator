@@ -18,9 +18,6 @@ using Nefarius.Drivers.Identinator;
 using Nefarius.Utilities.DeviceManagement.Drivers;
 using Nefarius.Utilities.DeviceManagement.Extensions;
 using Nefarius.Utilities.DeviceManagement.PnP;
-#if !DEBUG
-using Nefarius.Utilities.GitHubUpdater;
-#endif
 using Resourcer;
 
 namespace Identinator;
@@ -112,16 +109,6 @@ public partial class MainWindow : MetroWindow
             // Could do something with firstRunWindow.ChildWindowResult
             Settings.Default.IsFirstRun = false;
         }
-
-#if !DEBUG
-        if (new UpdateChecker("nefarius", "Identinator").IsUpdateAvailable)
-        {
-            await this.ShowMessageAsync("Update available",
-                "A newer version of the Identinator is available, I'll now take you to the download site!");
-            Process.Start(new ProcessStartInfo("https://github.com/nefarius/Identinator/releases/latest")
-                { UseShellExecute = true });
-        }
-#endif
 
         // Driver installer
         if (!_viewModel.FilterDriver.IsDriverInstalled)

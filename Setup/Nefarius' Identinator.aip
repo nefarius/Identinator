@@ -18,14 +18,13 @@
     <ROW Property="ARPURLINFOABOUT" Value="https://vigem.org/Community-Support/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/nefarius/Identinator/releases"/>
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/nefarius/Identinator/blob/master/LICENSE.md" Type="4"/>
-    <ROW Property="AiPreferFastOem" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="IAgree" Value="No" Type="4"/>
-    <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="Manufacturer" Value="Nefarius Software Solutions e.U."/>
-    <ROW Property="ProductCode" Value="1033:{A9C8E5CD-3B21-416F-98DE-30E8B242512C} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{E99807A0-3C23-4212-82CA-D112ABE7BA29} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Nefarius&apos; Identinator"/>
-    <ROW Property="ProductVersion" Value="1.12.1"/>
+    <ROW Property="ProductVersion" Value="1.13.1"/>
+    <ROW Property="REBOOT" MultiBuildValue="DefaultBuild:Force"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{6F73A8D9-8054-4DAE-8B3D-33A02654005A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -47,6 +46,8 @@
     <ROW Directory="StartMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="STARTM~1|StartMenuFolder" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="de_Dir" Directory_Parent="APPDIR" DefaultDir="de"/>
+    <ROW Directory="drivers_Dir" Directory_Parent="APPDIR" DefaultDir="drivers"/>
+    <ROW Directory="nssidswap_x64_Dir" Directory_Parent="drivers_Dir" DefaultDir="NSSIDS~1|nssidswap_x64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_ExePath" ComponentId="{2CA93EEA-9153-4156-8744-AE4642EC073A}" Directory_="APPDIR" Attributes="260" KeyPath="AI_ExePath"/>
@@ -56,6 +57,7 @@
     <ROW Component="Identinator.deps.json" ComponentId="{0D0E70F8-DCB4-4A5E-B45E-44B14D2F23AE}" Directory_="APPDIR" Attributes="0" KeyPath="Identinator.deps.json" Type="0"/>
     <ROW Component="Identinator.dll" ComponentId="{82825F4D-4627-4102-A0A8-7A1389348EB6}" Directory_="APPDIR" Attributes="256" KeyPath="Identinator.dll"/>
     <ROW Component="Identinator.exe" ComponentId="{BA0DF6B2-D12C-4DA9-9304-1BF1DD6D36A7}" Directory_="APPDIR" Attributes="256" KeyPath="Identinator.exe"/>
+    <ROW Component="LICENSE" ComponentId="{CF651EB2-2AD0-4C6C-B35A-AB0AE230530A}" Directory_="nssidswap_x64_Dir" Attributes="0" KeyPath="LICENSE" Type="0"/>
     <ROW Component="MahApps.Metro.IconPacks.BootstrapIcons.dll" ComponentId="{F5D052CB-804F-4808-B98E-5A316F2DEDDE}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.BootstrapIcons.dll"/>
     <ROW Component="MahApps.Metro.IconPacks.BoxIcons.dll" ComponentId="{3A717F32-B3E0-45F2-A23F-B220964D94BE}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.BoxIcons.dll"/>
     <ROW Component="MahApps.Metro.IconPacks.Codicons.dll" ComponentId="{032BC6AE-9214-4589-A40A-9EF7C02F108B}" Directory_="APPDIR" Attributes="0" KeyPath="MahApps.Metro.IconPacks.Codicons.dll"/>
@@ -108,6 +110,7 @@
     <ROW Component="ProductInformation" ComponentId="{B04FF1DE-4BCB-4BBC-A3EA-DEF19FA2E9EB}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
     <ROW Component="ShowMeTheXAML.dll" ComponentId="{E52E99D0-3A58-43CD-9623-3D8CDB12B13A}" Directory_="APPDIR" Attributes="0" KeyPath="ShowMeTheXAML.dll"/>
     <ROW Component="Validation.dll" ComponentId="{9422FB88-DE83-4CD5-8B06-4494662BC346}" Directory_="APPDIR" Attributes="0" KeyPath="Validation.dll"/>
+    <ROW Component="nefconw.exe" ComponentId="{0740EDB3-ECC9-4280-A4C4-AB987D45475C}" Directory_="APPDIR" Attributes="256" KeyPath="nefconw.exe"/>
     <ROW Component="updater.exe" ComponentId="{809CD9DA-09A2-4ABD-8965-196A49947B37}" Directory_="APPDIR" Attributes="0" KeyPath="updater.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
@@ -173,6 +176,11 @@
     <ROW File="Validation.dll" Component_="Validation.dll" FileName="VALIDA~1.DLL|Validation.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\Validation.dll" SelfReg="false"/>
     <ROW File="MahApps.Metro.resources.dll" Component_="MahApps.Metro.resources.dll" FileName="MAHAPP~1.DLL|MahApps.Metro.resources.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\de\MahApps.Metro.resources.dll" SelfReg="false"/>
     <ROW File="updater.exe" Component_="updater.exe" FileName="IDENTI~2.EXE|Identinator_Updater.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="&lt;AI_STUBS&gt;updater.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="nefconw.exe" Component_="nefconw.exe" FileName="nefconw.exe" Attributes="0" SourcePath="nefconw.exe" SelfReg="false"/>
+    <ROW File="LICENSE" Component_="LICENSE" FileName="LICENSE" Attributes="0" SourcePath="..\..\nssidswap\bin\x64\Signed_1152921505694978121\drivers\nssidswap_x64\LICENSE" SelfReg="false"/>
+    <ROW File="nssidswap.cat" Component_="LICENSE" FileName="NSSIDS~1.CAT|nssidswap.cat" Attributes="0" SourcePath="..\..\nssidswap\bin\x64\Signed_1152921505694978121\drivers\nssidswap_x64\nssidswap.cat" SelfReg="false"/>
+    <ROW File="nssidswap.inf" Component_="LICENSE" FileName="NSSIDS~1.INF|nssidswap.inf" Attributes="0" SourcePath="..\..\nssidswap\bin\x64\Signed_1152921505694978121\drivers\nssidswap_x64\nssidswap.inf" SelfReg="false"/>
+    <ROW File="nssidswap.sys" Component_="LICENSE" FileName="NSSIDS~1.SYS|nssidswap.sys" Attributes="0" SourcePath="..\..\nssidswap\bin\x64\Signed_1152921505694978121\drivers\nssidswap_x64\nssidswap.sys" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -181,7 +189,7 @@
     <ROW Action="AI_DetectSoftware" Sequence="151"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" Languages="en" InstallationType="2" CabsLocation="1" CompressCabs="false" UseLzma="true" LzmaMethod="2" LzmaCompressionLevel="4" PackageType="1" FilesInsideExe="true" ExeIconPath="..\assets\NSS-128x128.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true" ExeName="HidHide_[|ProductVersion]_x64" MsiPackageType="x64"/>
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" Languages="en" InstallationType="2" CabsLocation="1" CompressCabs="false" UseLzma="true" LzmaMethod="2" LzmaCompressionLevel="4" PackageType="1" FilesInsideExe="true" ExeIconPath="..\assets\NSS-128x128.ico" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" UseLargeSchema="true" ExeName="Identinator_[|ProductVersion]_x64" MsiPackageType="x64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -299,9 +307,17 @@
     <ROW Action="AI_UPDATER_SERVICE_CONFIG" Type="3090" Source="updater.exe" Target="/configservice -name &quot;updater&quot;"/>
     <ROW Action="AI_UPDATER_UNINSTALL" Type="82" Source="updater.exe" Target="/clean silent"/>
     <ROW Action="AI_UninstallTasks2" Type="1" Source="aischeduler2.dll" Target="UninstallTasks"/>
+    <ROW Action="AddClassFilterUSB" Type="1106" Source="nefconw.exe" Target="--add-class-filter --position upper --service-name nssidswap --class-guid 36FC9E60-C465-11CF-8056-444553540000"/>
+    <ROW Action="AddClassFilterXBOX" Type="1106" Source="nefconw.exe" Target="--add-class-filter --position upper --service-name nssidswap --class-guid 05f5cfe2-4733-4950-a6bb-07aad01a3a84"/>
+    <ROW Action="AddClassFilterXNA" Type="1106" Source="nefconw.exe" Target="--add-class-filter --position upper --service-name nssidswap --class-guid d61ca365-5af4-4486-998b-9db4734c6ca3"/>
+    <ROW Action="InstallDriver" Type="1106" Source="nefconw.exe" Target="--install-driver --inf-path &quot;[#nssidswap.inf]&quot;"/>
+    <ROW Action="RemoveClassFilterUSB" Type="1106" Source="nefconw.exe" Target="--remove-class-filter --position upper --service-name nssidswap --class-guid 36FC9E60-C465-11CF-8056-444553540000"/>
+    <ROW Action="RemoveClassFilterXBOX" Type="1106" Source="nefconw.exe" Target="--remove-class-filter --position upper --service-name nssidswap --class-guid 05f5cfe2-4733-4950-a6bb-07aad01a3a84"/>
+    <ROW Action="RemoveClassFilterXNA" Type="1106" Source="nefconw.exe" Target="--remove-class-filter --position upper --service-name nssidswap --class-guid d61ca365-5af4-4486-998b-9db4734c6ca3"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder]Nefarius Software Solutions\[ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+    <ROW Action="UninstallDriver" Type="1106" Source="nefconw.exe" Target="--uninstall-driver --inf-path &quot;[#nssidswap.inf]&quot;"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
     <ROW Feature_="MainFeature" Component_="APPDIR"/>
@@ -364,6 +380,8 @@
     <ROW Feature_="MainFeature" Component_="Validation.dll"/>
     <ROW Feature_="MainFeature" Component_="MahApps.Metro.resources.dll"/>
     <ROW Feature_="MainFeature" Component_="updater.exe"/>
+    <ROW Feature_="MainFeature" Component_="nefconw.exe"/>
+    <ROW Feature_="MainFeature" Component_="LICENSE"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="NSS128x128.exe" SourcePath="..\assets\NSS-128x128.ico" Index="0"/>
@@ -405,6 +423,14 @@
     <ROW Action="AI_ProcessTasks2" Condition="(VersionNT &gt;= 600) AND (REMOVE&lt;&gt;&quot;ALL&quot;)" Sequence="1624"/>
     <ROW Action="AI_UninstallTasks2" Condition="(VersionNT &gt;= 600) AND (REMOVE=&quot;ALL&quot;)" Sequence="1699"/>
     <ROW Action="AI_UPDATER_SERVICE_CONFIG" Condition="( ( ( NOT Installed AND VersionNT) OR ( Installed AND REMOVE &lt;&gt; &quot;ALL&quot; AND AI_INSTALL_MODE &lt;&gt; &quot;Remove&quot; AND VersionNT) ) AND ($updater.exe = 3) )" Sequence="5801"/>
+    <ROW Action="InstallDriver" Condition="( NOT Installed )" Sequence="6401"/>
+    <ROW Action="AddClassFilterUSB" Condition="( NOT Installed )" Sequence="6402"/>
+    <ROW Action="AddClassFilterXNA" Condition="( NOT Installed )" Sequence="6403"/>
+    <ROW Action="AddClassFilterXBOX" Condition="( NOT Installed )" Sequence="6404"/>
+    <ROW Action="RemoveClassFilterUSB" Condition="( Installed AND ( REMOVE = &quot;ALL&quot; OR AI_INSTALL_MODE = &quot;Remove&quot; ) )" Sequence="1601"/>
+    <ROW Action="RemoveClassFilterXNA" Condition="( Installed AND ( REMOVE = &quot;ALL&quot; OR AI_INSTALL_MODE = &quot;Remove&quot; ) )" Sequence="1602"/>
+    <ROW Action="RemoveClassFilterXBOX" Condition="( Installed AND ( REMOVE = &quot;ALL&quot; OR AI_INSTALL_MODE = &quot;Remove&quot; ) )" Sequence="1603"/>
+    <ROW Action="UninstallDriver" Condition="( Installed AND ( REMOVE = &quot;ALL&quot; OR AI_INSTALL_MODE = &quot;Remove&quot; ) )" Sequence="1604"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>

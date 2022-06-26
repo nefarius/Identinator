@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using Bluegrams.Application;
 using Identinator.Properties;
@@ -14,7 +15,14 @@ public partial class App : Application
     {
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
 
-        PortableJsonSettingsProvider.SettingsFileName = "Identinator.config";
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+        var cfgPath = Path.Combine(appData, "Nefarius' Identinator");
+
+        if (!Directory.Exists(cfgPath))
+            Directory.CreateDirectory(cfgPath);
+
+        PortableJsonSettingsProvider.SettingsFileName = Path.Combine(cfgPath, "Identinator.config");
         PortableJsonSettingsProvider.ApplyProvider(Settings.Default);
 
         base.OnStartup(e);
@@ -22,6 +30,7 @@ public partial class App : Application
 
     private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
-        MessageBox.Show(e.ExceptionObject.ToString(), "Unhandled exception occurred", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show(e.ExceptionObject.ToString(), "Unhandled exception occurred", MessageBoxButton.OK,
+            MessageBoxImage.Error);
     }
 }

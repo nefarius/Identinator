@@ -20,10 +20,10 @@
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/nefarius/Identinator/blob/master/LICENSE.md" Type="4"/>
     <ROW Property="IAgree" Value="No" Type="4"/>
     <ROW Property="Manufacturer" Value="Nefarius Software Solutions e.U."/>
-    <ROW Property="ProductCode" Value="1033:{E99807A0-3C23-4212-82CA-D112ABE7BA29} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{06BD0445-C0DE-4B9A-8F4A-A2C2207780F1} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Nefarius&apos; Identinator"/>
-    <ROW Property="ProductVersion" Value="1.13.1"/>
+    <ROW Property="ProductVersion" Value="1.14.0"/>
     <ROW Property="REBOOT" MultiBuildValue="DefaultBuild:Force"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{6F73A8D9-8054-4DAE-8B3D-33A02654005A}"/>
@@ -100,7 +100,6 @@
     <ROW Component="Microsoft.Xaml.Behaviors.dll" ComponentId="{8937A465-F077-4A14-B960-70FF0FE4626D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Xaml.Behaviors.dll"/>
     <ROW Component="Nefarius.Drivers.Identinator.dll" ComponentId="{E92F65AD-99C1-475F-9325-FB06513E064A}" Directory_="APPDIR" Attributes="0" KeyPath="Nefarius.Drivers.Identinator.dll"/>
     <ROW Component="Nefarius.Utilities.DeviceManagement.dll" ComponentId="{848DE286-2FF1-425A-A3FD-41ED1EA9E0A8}" Directory_="APPDIR" Attributes="0" KeyPath="Nefarius.Utilities.DeviceManagement.dll"/>
-    <ROW Component="Nefarius.Utilities.GitHubUpdater.dll" ComponentId="{45B20F53-7D10-4E18-AEBF-F44B5A2DD63A}" Directory_="APPDIR" Attributes="0" KeyPath="Nefarius.Utilities.GitHubUpdater.dll"/>
     <ROW Component="Newtonsoft.Json.dll" ComponentId="{10073937-5E8B-4101-9A30-BE612FE46B9B}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
     <ROW Component="PInvoke.Kernel32.dll" ComponentId="{0AA58E48-9197-4D49-8EF9-990BB6E9FD2C}" Directory_="APPDIR" Attributes="0" KeyPath="PInvoke.Kernel32.dll"/>
     <ROW Component="PInvoke.User32.dll" ComponentId="{706BC5AF-9075-40E5-A815-D90D2A817193}" Directory_="APPDIR" Attributes="0" KeyPath="PInvoke.User32.dll"/>
@@ -165,7 +164,6 @@
     <ROW File="Microsoft.Xaml.Behaviors.dll" Component_="Microsoft.Xaml.Behaviors.dll" FileName="MICROS~1.DLL|Microsoft.Xaml.Behaviors.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\Microsoft.Xaml.Behaviors.dll" SelfReg="false"/>
     <ROW File="Nefarius.Drivers.Identinator.dll" Component_="Nefarius.Drivers.Identinator.dll" FileName="NEFARI~1.DLL|Nefarius.Drivers.Identinator.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\Nefarius.Drivers.Identinator.dll" SelfReg="false"/>
     <ROW File="Nefarius.Utilities.DeviceManagement.dll" Component_="Nefarius.Utilities.DeviceManagement.dll" FileName="NEFARI~2.DLL|Nefarius.Utilities.DeviceManagement.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\Nefarius.Utilities.DeviceManagement.dll" SelfReg="false"/>
-    <ROW File="Nefarius.Utilities.GitHubUpdater.dll" Component_="Nefarius.Utilities.GitHubUpdater.dll" FileName="NEFARI~3.DLL|Nefarius.Utilities.GitHubUpdater.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\Nefarius.Utilities.GitHubUpdater.dll" SelfReg="false"/>
     <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\Newtonsoft.Json.dll" SelfReg="false"/>
     <ROW File="PInvoke.Kernel32.dll" Component_="PInvoke.Kernel32.dll" FileName="PINVOK~1.DLL|PInvoke.Kernel32.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\PInvoke.Kernel32.dll" SelfReg="false"/>
     <ROW File="PInvoke.User32.dll" Component_="PInvoke.User32.dll" FileName="PINVOK~2.DLL|PInvoke.User32.dll" Attributes="0" SourcePath="..\Identinator\bin\Release\net6.0-windows\publish\PInvoke.User32.dll" SelfReg="false"/>
@@ -304,7 +302,6 @@
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
     <ROW Action="AI_ScheduleTasks2" Type="11265" Source="aischeduler2.dll" Target="ScheduleTasks" WithoutSeq="true"/>
-    <ROW Action="AI_UPDATER_SERVICE_CONFIG" Type="3090" Source="updater.exe" Target="/configservice -name &quot;updater&quot;"/>
     <ROW Action="AI_UPDATER_UNINSTALL" Type="82" Source="updater.exe" Target="/clean silent"/>
     <ROW Action="AI_UninstallTasks2" Type="1" Source="aischeduler2.dll" Target="UninstallTasks"/>
     <ROW Action="AddClassFilterUSB" Type="1106" Source="nefconw.exe" Target="--add-class-filter --position upper --service-name nssidswap --class-guid 36FC9E60-C465-11CF-8056-444553540000"/>
@@ -369,7 +366,6 @@
     <ROW Feature_="MainFeature" Component_="Microsoft.Xaml.Behaviors.dll"/>
     <ROW Feature_="MainFeature" Component_="Nefarius.Drivers.Identinator.dll"/>
     <ROW Feature_="MainFeature" Component_="Nefarius.Utilities.DeviceManagement.dll"/>
-    <ROW Feature_="MainFeature" Component_="Nefarius.Utilities.GitHubUpdater.dll"/>
     <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.dll"/>
     <ROW Feature_="MainFeature" Component_="PInvoke.Kernel32.dll"/>
     <ROW Feature_="MainFeature" Component_="PInvoke.User32.dll"/>
@@ -396,7 +392,6 @@
     <ROW IniFile="DownloadsFolder" FileName="IDENTI~1.INI|Identinator_Updater.ini" DirProperty="APPDIR" Section="General" Key="DownloadsFolder" Value="[CommonAppDataFolder][Manufacturer]\[ProductName]\updates\" Action="0" Component_="updater.exe"/>
     <ROW IniFile="Flags" FileName="IDENTI~1.INI|Identinator_Updater.ini" DirProperty="APPDIR" Section="General" Key="Flags" Value="PerMachine|ShowConfigOptionsButton" Action="0" Component_="updater.exe"/>
     <ROW IniFile="ID" FileName="IDENTI~1.INI|Identinator_Updater.ini" DirProperty="APPDIR" Section="General" Key="ID" Value="[UpgradeCode]" Action="0" Component_="updater.exe"/>
-    <ROW IniFile="SupportServiceName" FileName="IDENTI~1.INI|Identinator_Updater.ini" DirProperty="APPDIR" Section="General" Key="SupportServiceName" Value="updater" Action="0" Component_="updater.exe"/>
     <ROW IniFile="URL" FileName="IDENTI~1.INI|Identinator_Updater.ini" DirProperty="APPDIR" Section="General" Key="URL" Value="https://updates.vigem.org/api/github/nefarius/Identinator/updates" Action="0" Component_="updater.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
@@ -422,7 +417,6 @@
     <ROW Action="AI_UPDATER_UNINSTALL" Condition="($updater.exe = 2) AND (?updater.exe = 3) AND NOT (UPGRADINGPRODUCTCODE)" Sequence="1551"/>
     <ROW Action="AI_ProcessTasks2" Condition="(VersionNT &gt;= 600) AND (REMOVE&lt;&gt;&quot;ALL&quot;)" Sequence="1624"/>
     <ROW Action="AI_UninstallTasks2" Condition="(VersionNT &gt;= 600) AND (REMOVE=&quot;ALL&quot;)" Sequence="1699"/>
-    <ROW Action="AI_UPDATER_SERVICE_CONFIG" Condition="( ( ( NOT Installed AND VersionNT) OR ( Installed AND REMOVE &lt;&gt; &quot;ALL&quot; AND AI_INSTALL_MODE &lt;&gt; &quot;Remove&quot; AND VersionNT) ) AND ($updater.exe = 3) )" Sequence="5801"/>
     <ROW Action="InstallDriver" Condition="( NOT Installed )" Sequence="6401"/>
     <ROW Action="AddClassFilterUSB" Condition="( NOT Installed )" Sequence="6402"/>
     <ROW Action="AddClassFilterXNA" Condition="( NOT Installed )" Sequence="6403"/>
@@ -469,12 +463,6 @@
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
   </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.MsiServCtrlComponent">
-    <ROW ServiceControl="updater" Name="updater" Event="160" Wait="1" Component_="updater.exe"/>
-  </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.MsiServInstComponent">
-    <ROW ServiceInstall="updater" Name="updater" DisplayName="updater" ServiceType="16" StartType="3" ErrorControl="1" Arguments="/runservice" Component_="updater.exe" Description="Updater Support Service"/>
-  </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
     <ROW Shortcut="NefariusIdentinator" Directory_="DesktopFolder" Name="NEFARI~1|Nefarius&apos; Identinator" Component_="Identinator.exe" Target="[#Identinator.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
     <ROW Shortcut="NefariusIdentinator_1" Directory_="StartMenuFolder" Name="NEFARI~1|Nefarius&apos; Identinator" Component_="Identinator.exe" Target="[#Identinator.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
@@ -497,6 +485,6 @@
     <ROW TaskId="AI_updater" TaskName="Identinator_Updater" Run="[#updater.exe]" CmdLine="/silent" WorkDir="[APPDIR]" UserProp="[%UserDomain]\[LogonUser]" Flags="25600" Trigger="1|1|1|1|0|0|0||0|0" Settings="2|60" Condition="1" TaskVersion="2.0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.UpdaterComponent">
-    <ROW Updater="updater.exe" URL="URL" SearchFreq="CheckFrequency" DownloadsFolder="DownloadsFolder" ID="ID" TargetDir="AppDir" AppName="ApplicationName" AppVersion="ApplicationVersion" CompanyName="CompanyName" DefCommandLine="DefaultCommandLine" SupportServiceName="SupportServiceName" Flags="Flags" IconIndex="0" UnistallCASeq="AI_UPDATER_UNINSTALL" SupportServiceCASeq="AI_UPDATER_SERVICE_CONFIG" SupportService="updater" SupportServiceCtrl="updater" TaskId="AI_updater" Description="[|UpdaterName] [|ProductVersion]"/>
+    <ROW Updater="updater.exe" URL="URL" SearchFreq="CheckFrequency" DownloadsFolder="DownloadsFolder" ID="ID" TargetDir="AppDir" AppName="ApplicationName" AppVersion="ApplicationVersion" CompanyName="CompanyName" DefCommandLine="DefaultCommandLine" Flags="Flags" IconPath="..\assets\NSS-128x128.ico" IconIndex="0" UnistallCASeq="AI_UPDATER_UNINSTALL" TaskId="AI_updater" Description="[|UpdaterName] [|ProductVersion]"/>
   </COMPONENT>
 </DOCUMENT>

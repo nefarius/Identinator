@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="19.5" version="19.5" Modules="enterprise" RootPath="." Language="en" Id="{361D15C2-CC93-4F8B-B257-A4271349E172}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="19.5" version="19.6" Modules="enterprise" RootPath="." Language="en" Id="{361D15C2-CC93-4F8B-B257-A4271349E172}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
-    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;SccmComponent;ActSyncAppComponent;CPLAppletComponent;AutorunComponent;GameUxComponent;SilverlightSlnComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+    <ROW Name="HiddenItems" Value="ActSyncAppComponent;CPLAppletComponent;AutorunComponent;GameUxComponent;SilverlightSlnComponent;SharePointSlnComponent;AppXAppDetailsComponent;FixupComponent;AppXCapabilitiesComponent;AppXDependenciesComponent;AppXProductDetailsComponent;AppXVisualAssetsComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
     <ROW Property="AI_CURRENT_YEAR" Value="2022" ValueLocId="-"/>
     <ROW Property="AI_FINDEXE_TITLE" Value="Select the installation package for [|ProductName]" ValueLocId="AI.Property.FindExeTitle"/>
-    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 19.5 build 36301275" ValueLocId="-"/>
+    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 19.6 build bf52c98e" ValueLocId="-"/>
     <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_INTERNET_CONNECTION"/>
     <ROW Property="ALLUSERS" Value="1"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
@@ -20,10 +20,10 @@
     <ROW Property="AiLicenseAgreementLink" Value="https://github.com/nefarius/Identinator/blob/master/LICENSE.md" Type="4"/>
     <ROW Property="IAgree" Value="No" Type="4"/>
     <ROW Property="Manufacturer" Value="Nefarius Software Solutions e.U."/>
-    <ROW Property="ProductCode" Value="1033:{06BD0445-C0DE-4B9A-8F4A-A2C2207780F1} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{779579B1-1B93-4611-BFF5-C1AFB9599532} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Nefarius&apos; Identinator"/>
-    <ROW Property="ProductVersion" Value="1.14.0"/>
+    <ROW Property="ProductVersion" Value="1.14.1"/>
     <ROW Property="REBOOT" MultiBuildValue="DefaultBuild:Force"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{6F73A8D9-8054-4DAE-8B3D-33A02654005A}"/>

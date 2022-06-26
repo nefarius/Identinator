@@ -10,6 +10,10 @@
 
 Please visit the official website for detailed documentation!
 
+## Download
+
+A setup is provided [on the releases page](https://github.com/nefarius/Identinator/releases).
+
 ## License
 
 Redistribution of binaries signed by Nefarius Software Solution e.U. is prohibited without prior written consent from the authors. Bundling Identinator or `nssidswap.sys` binaries within foreign packages is prohibited without prior written consent from the authors. For details see `LICENSE.md` file.

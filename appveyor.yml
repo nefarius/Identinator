@@ -26,5 +26,5 @@ deploy:
 - provider: Environment
   name: nuget.org
   on:
-    branch: master
+    branch: lib
     appveyor_repo_tag: true

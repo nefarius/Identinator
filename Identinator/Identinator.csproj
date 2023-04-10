@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -52,7 +52,7 @@
     <PackageReference Include="MahApps.Metro.SimpleChildWindow" Version="2.2.1" />
     <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
     <PackageReference Include="MdXaml" Version="1.17.0" />
-    <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="3.8.228" />
+    <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="3.9.255" />
     <PackageReference Include="PortableJsonSettingsProvider" Version="0.2.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="Resourcer.Fody" Version="1.8.1" PrivateAssets="All" />

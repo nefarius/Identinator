@@ -32,7 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-    <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="2.8.110" />
+    <PackageReference Include="Nefarius.Utilities.DeviceManagement" Version="3.14.305" />
   </ItemGroup>
 
   <!--

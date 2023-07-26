@@ -2,7 +2,7 @@
 
 # Nefarius' Identinator
 
-[![Build status](https://ci.appveyor.com/api/projects/status/6mpsnmo569anfhoa?svg=true)](https://ci.appveyor.com/project/nefarius/identinator) ![Requirements](https://img.shields.io/badge/Requires-.NET%206.0-blue.svg) [![Nuget](https://img.shields.io/nuget/v/Nefarius.Drivers.Identinator?label=NuGet%20version)](https://www.nuget.org/packages/Nefarius.Drivers.Identinator/) [![Nuget](https://img.shields.io/nuget/dt/Nefarius.Drivers.Identinator?label=NuGet%20downloads)](https://www.nuget.org/packages/Nefarius.Drivers.Identinator/) [![GitHub All Releases](https://img.shields.io/github/downloads/nefarius/Identinator/total?label=UI%20downloads)](https://somsubhra.github.io/github-release-stats/?username=nefarius&repository=Identinator)
+[![Build status](https://ci.appveyor.com/api/projects/status/6mpsnmo569anfhoa?svg=true)](https://ci.appveyor.com/project/nefarius/identinator) ![Requirements](https://img.shields.io/badge/Requires-.NET%206.0-blue.svg)
 
 ⚠️ **UNFORGIVING SOFTWARE AHEAD, USE WITH EXTRA CARE** ⚠️
 

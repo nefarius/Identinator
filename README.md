@@ -6,7 +6,7 @@
 
 ⚠️ **UNFORGIVING SOFTWARE AHEAD, USE WITH EXTRA CARE** ⚠️
 
-## Documentation: [vigem.org/projects/Identinator/](https://vigem.org/projects/Identinator/)
+## Documentation: [docs.nefarius.at//projects/Identinator/](https://docs.nefarius.at/projects/Identinator/)
 
 Please visit the official website for detailed documentation!
 

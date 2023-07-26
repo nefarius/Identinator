@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Identinator/drivers/nssidswap_x64
 /Setup
+*.zip
